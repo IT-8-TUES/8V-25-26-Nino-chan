@@ -1,0 +1,342 @@
+openapi: 3.0.3
+info:
+  title: Events API
+  version: 0.1.0
+
+tags:
+  - name: HOME
+  - name: LOGIN
+  - name: REGISTER
+  - name: ARCHIVE
+  - name: LONG DESCRIPTION
+  - name: SEARCH PAGE
+  - name: PROFILE
+  - name: VERIFY
+
+paths:
+
+  /event/{id}:
+    get:
+      tags: [HOME, LONG DESCRIPTION]
+      summary: HOME / LONG DESCRIPTION
+      description: |
+        normal
+
+        Used by two pages:
+        - HOME: path is a date, returns events on that date as a list of {title, creator, id}.
+        - LONG DESCRIPTION: path is an event id, returns event detail
+          {title, description, date, creator, creatorid}.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          description: date (YYYY-MM-DD) for HOME, event id for LONG DESCRIPTION
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EventSummary'
+                  - $ref: '#/components/schemas/EventDetail'
+
+  /user:
+    post:
+      tags: [LOGIN, REGISTER, VERIFY]
+      summary: LOGIN / REGISTER / VERIFY
+      description: |
+        - LOGIN: public. Body {email, password}. Response {code, jwt}.
+        - REGISTER: public. Body {email, password}. Response {code}.
+        - VERIFY: normal. Body {email, password, userid}. Response {code}.
+      parameters:
+        - in: header
+          name: jwt
+          required: false
+          description: required for VERIFY only
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Credentials'
+                - $ref: '#/components/schemas/VerifyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/LoginResponse'
+                  - $ref: '#/components/schemas/Code'
+
+    patch:
+      tags: [PROFILE]
+      summary: PROFILE - update profile
+      description: normal
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfilePatch'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+
+  /user/{userid}:
+    get:
+      tags: [ARCHIVE, PROFILE]
+      summary: ARCHIVE / PROFILE
+      description: |
+        normal
+
+        Used by two pages:
+        - ARCHIVE: returns the user's events as a list of {title, creator, id}.
+        - PROFILE: returns the user's profile {email, username, bio}.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EventSummary'
+                  - $ref: '#/components/schemas/Profile'
+
+    post:
+      tags: [LONG DESCRIPTION]
+      summary: LONG DESCRIPTION - mark participation
+      description: normal
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Participation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+
+  /event:
+    get:
+      tags: [SEARCH PAGE]
+      summary: SEARCH PAGE
+      description: normal
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: user
+          schema:
+            type: string
+        - in: query
+          name: page_num
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+
+    post:
+      tags: [PROFILE]
+      summary: PROFILE - create event
+      description: verification required
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEvent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+
+components:
+  schemas:
+
+    Code:
+      type: object
+      properties:
+        code:
+          type: integer
+
+    Credentials:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        jwt:
+          type: string
+
+    VerifyRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        userid:
+          type: integer
+
+    EventSummary:
+      type: object
+      properties:
+        title:
+          type: string
+        creator:
+          type: string
+        id:
+          type: integer
+
+    EventDetail:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        creator:
+          type: string
+        creatorid:
+          type: integer
+
+    SearchResult:
+      type: object
+      properties:
+        date:
+          type: string
+        title:
+          type: string
+        eventid:
+          type: integer
+        creatorid:
+          type: integer
+        creator:
+          type: string
+
+    Profile:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+        bio:
+          type: string
+
+    ProfilePatch:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+        bio:
+          type: string
+        userid:
+          type: integer
+
+    Participation:
+      type: object
+      properties:
+        userid:
+          type: integer
+        participating:
+          type: boolean
+
+    NewEvent:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        creator:
+          type: string

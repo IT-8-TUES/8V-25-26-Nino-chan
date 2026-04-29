@@ -1,0 +1,6 @@
+# Backend Python dependencies (installed with pip)
+# Format: package==version  (one per line, # for comments)
+
+flask==3.1.3
+flasgger==0.9.7.1
+pyyaml==6.0.3

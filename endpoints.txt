@@ -1,0 +1,118 @@
+1 HOME –    GET /event/{date} - normal
+
+
+2 LOGIN  -- POST /user 
+
+
+3 REGISTER – POST /user
+
+
+4 ARCHIVE – GET /user/{user_id} - normal
+
+
+5 LONG DESCRIPTION – POST /user/{user_id}; GET /event/{id} – normal; normal
+
+
+6 SEARCH PAGE – GET /event/{title, user, page_num} - normal
+
+
+7 PROFILE – GET /user/{userid}; PATCH /user; POST /event – normal; normal; verification    required
+
+
+8 VERIFY – POST /user - normal
+
+
+
+
+
+(LOGIN)POST /user – {
+“email”:__,
+“password”:
+}
+
+{
+“code”:,
+“jwt”:
+}
+
+
+(register)POST /user – {
+“email”:,
+“password”:
+}
+
+{
+“code”:
+}
+
+
+(HOME)GET /event/{date} –  {
+            “title”:,
+            “creator”:,
+            “id”:_
+}
+
+(ARCHIVE)GET /user/{userid} – {
+                “title”:,
+                “creator”:,
+                “id”:
+}
+(LONG DESCRIPTION)POST /user– {
+                    “userid”:__,
+                    “participating”:
+                                                               {
+                    {
+“code”:
+}
+
+(LONG DESCRIPTION)GET /event/{id} – {
+                        “title”:,
+                        “description”:,
+                        “date”:,
+                        “creator”:,
+                        “creatorid”:__
+}
+
+SEARCH PAGE – GET /event/{title, user, pagenum}  -- {
+“date”:__,
+“title”:_,
+“eventid”:,
+“creatorid”:__,
+“creator”:_
+}
+
+PROFILE – GET /user/{userid} – {
+                “email”:,
+                “username”:,
+                “bio”:
+}
+PROFILE -- PATCH /user– {
+“email”:,
+                    “username”:,
+“bio”:_,
+“userid”:
+}
+PROFILE -- POST /event – {
+                “title”:,
+                “description”:,
+                “date”:,
+                “creator”:,
+}
+{
+“code”:
+}
+
+
+
+
+
+
+
+VERIFY – POST /user– {
+                    “email”:,
+                    “password”:_,
+                    “userid”:
+}
+{
+“code”:___
+}

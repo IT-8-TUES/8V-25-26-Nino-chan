@@ -1,0 +1,2 @@
+# Frontend npm dependencies (installed with npm)
+# Format: package@version  (one per line, # for comments)
