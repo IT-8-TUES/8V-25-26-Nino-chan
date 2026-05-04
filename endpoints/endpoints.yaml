@@ -50,39 +50,91 @@ paths:
                       $ref: '#/components/schemas/EventSummary'
                   - $ref: '#/components/schemas/EventDetail'
 
-  /user:
+  /user/login:
     post:
-      tags: [LOGIN, REGISTER, VERIFY]
-      summary: LOGIN / REGISTER / VERIFY
-      description: |
-        - LOGIN: public. Body {email, password}. Response {code, jwt}.
-        - REGISTER: public. Body {email, password}. Response {code}.
-        - VERIFY: normal. Body {email, password, userid}. Response {code}.
-      parameters:
-        - in: header
-          name: jwt
-          required: false
-          description: required for VERIFY only
-          schema:
-            type: string
+      operationId: login
+      tags: [LOGIN]
+      summary: LOGIN
+      description: Public. Authenticates a user and returns a JWT.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/Credentials'
-                - $ref: '#/components/schemas/VerifyRequest'
+              $ref: '#/components/schemas/Credentials'
+            example:
+              email: user@example.com
+              password: hunter2
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/LoginResponse'
-                  - $ref: '#/components/schemas/Code'
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                code: 200
+                jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQyfQ.signature
 
+  /user/register:
+    post:
+      operationId: register
+      tags: [REGISTER]
+      summary: REGISTER
+      description: Public. Creates a new user account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+            example:
+              email: newuser@example.com
+              password: hunter2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+              example:
+                code: 200
+
+  /user/verify:
+    post:
+      operationId: verify
+      tags: [VERIFY]
+      summary: VERIFY
+      description: Re-verifies the user's credentials before sensitive actions.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQyfQ.signature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+            example:
+              email: user@example.com
+              password: hunter2
+              userid: 42
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+              example:
+                code: 200
+
+  /user:
     patch:
       tags: [PROFILE]
       summary: PROFILE - update profile
