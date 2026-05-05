@@ -1,50 +1,70 @@
-# ABOUT
+# TUES Event Calendar
 
-Greeting fine gentlemen and gentlewomen. I hereby present you our intriguing project for the fabolous subject IT. This project is about making the lives of the TUES students and teachers easier, now you dont have to write boring emails that no one will see, but just put the event in the very briliant TUES calendar.
+## About
 
-## SUMMARY
+This project is a web application built for the students and teachers of TUES. Its purpose is to replace the old habit of sending event announcements by email — emails that often get ignored or lost. Instead, everyone has a single place to publish and discover school events, particularly those related to technology and engineering.
 
-This website's main purpose is to make publishing and finding events, specialised in the technological field, easier.
-You can search events by their date, by publisher or by subject.
-You can find specific information for the event that you want to attend.
-The user must be verified by the admins in order to publish events.
+## Summary
 
-## PAGES
+The platform allows any registered user to browse and search for upcoming school events. To publish events, a user must first be verified by the admins. Verification is requested through the app, and once approved, the user can post events that others can find and save.
 
-### HOME: This page will include a calendar for a selected month and when you click a date, yuo can see a quick summary of the events on the given date. It also includes a link to the profile page, archive page, search page.
+Users can search for events by title or publisher name. Since the subject of an event is typically reflected in its title, searching by keyword effectively lets you filter by topic as well. Date-based filtering is available directly from the homepage calendar.
 
-### LOGIN: Once you enter the credentials you proceed to the homepage.
+## How It Works
 
-### REGISTER: Register a user.
+When you first register, you can browse, search, and bookmark events, but you cannot publish them yet. To gain publishing rights, you submit a verification request through the Verify page. The admins receive a notification and approve your account manually. After that, you can create and publish events.
 
-### ARCHIVE: Here are the events that you wish to see. It displays a list of short descriptions of the saved events.
+When you find an event you want to attend, you can bookmark it from its detail page. Bookmarked events appear in your personal Archive, but only if they haven't happened yet — once an event's date passes, it is automatically removed from your Archive.
 
-### LONG DISCRIPTION: Gives a detailed description of the event including a creator, date and specific information about the event.
+---
 
-### SEARCH PAGE: You can search by publisher or title and a list of events will be displayed. On the bottom there will be arrows to navigate through all the events matching the description.
+## Pages
 
-### PROFILE: Here you can see your or other peoples accounts and change your own. 
+### Home
 
-### VERIFY: Send a verification (email) to the admins so you can post events.
+The main landing page. Displays a calendar for the selected month. Clicking on any date shows a brief summary of the events scheduled for that day. This is the primary way to browse events by date. The page also provides navigation links to the Search, Archive, and Profile pages.
 
-# REPOSITORY STRUCTURE
+### Login
 
-## ROOT
+A simple login form. Enter your credentials and you will be taken to the homepage.
 
-### GITIGNORE
+### Register
 
-### README
+Create a new account. After registering, you can browse and interact with the platform, but you will not be able to publish events until your account is verified.
 
-### DEPENDENCIES LIST
+### Verify
 
-### DEPENDENCY INSTALLATION SCRIPT
+Submit a request to become a verified publisher. The admins receive an email notification and will approve your account. Once approved, you can publish events on the platform.
 
-## BECKEND
+### Search
 
-## NIKOLA
+Search for events by title or publisher name. The search is flexible — since most events include their topic in the title, you can effectively search by subject as well. Results are displayed as a paginated list with navigation arrows to move between pages. Click any result to view the full event details.
 
-## MARTI
+### Long Description
 
-## PHILIP
+The full detail page for a single event. Displays the event's title, date, publisher, and a detailed description of what the event is about. From this page, you can bookmark the event to save it to your personal Archive.
 
-## KRISTIAN
+### Archive
+
+Your personal list of bookmarked events. Only shows events that are still upcoming — events whose dates have already passed are automatically hidden. Think of it as your personal "events I want to attend" list.
+
+### Profile
+
+Displays a user's public information: their username, email address, and bio. You can view any user's profile, but you can only edit your own.
+
+---
+
+## Repository Structure
+
+```
+root/
+├── .gitignore
+├── README.md
+├── dependencies list
+├── dependency installation script
+├── backend/
+├── NIKOLA/
+├── MARTI/
+├── PHILIP/
+└── KRISTIAN/
+```
