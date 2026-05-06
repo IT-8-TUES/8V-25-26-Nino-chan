@@ -4,6 +4,9 @@ import yaml
 from flask import Flask
 from flasgger import Swagger
 
+from events.routes import events_bp
+from users.routes import users_bp
+
 SPEC_PATH = Path(__file__).resolve().parent.parent / "endpoints" / "endpoints.yaml"
 
 app = Flask(__name__)
@@ -28,6 +31,9 @@ swagger_config = {
 }
 
 Swagger(app, template=template, config=swagger_config)
+
+app.register_blueprint(events_bp)
+app.register_blueprint(users_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

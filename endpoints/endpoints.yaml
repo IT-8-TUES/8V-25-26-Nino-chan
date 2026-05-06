@@ -23,8 +23,8 @@ paths:
         normal
 
         Used by two pages:
-        - HOME: path is a date, returns events on that date as a list of {title, creator, id}.
-        - LONG DESCRIPTION: path is an event id, returns event detail
+        - HOME: path is a date (YYYY-MM-DD), returns events on that date as a list of {title, creator, id}.
+        - LONG DESCRIPTION: path is an event ObjectId string, returns event detail
           {title, description, date, creator, creatorid}.
       parameters:
         - in: header
@@ -35,7 +35,7 @@ paths:
         - in: path
           name: id
           required: true
-          description: date (YYYY-MM-DD) for HOME, event id for LONG DESCRIPTION
+          description: date (YYYY-MM-DD) for HOME, event ObjectId string for LONG DESCRIPTION
           schema:
             type: string
       responses:
@@ -81,16 +81,17 @@ paths:
       operationId: register
       tags: [REGISTER]
       summary: REGISTER
-      description: Public. Creates a new user account.
+      description: Public. Creates a new user account. New accounts cannot publish events until verified by an admin.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/RegisterBody'
             example:
               email: newuser@example.com
               password: hunter2
+              username: newuser
       responses:
         '200':
           description: OK
@@ -106,7 +107,9 @@ paths:
       operationId: verify
       tags: [VERIFY]
       summary: VERIFY
-      description: Re-verifies the user's credentials before sensitive actions.
+      description: |
+        normal. Sends a verification request email to the admins so they can grant
+        the user publishing rights. Requires the user to confirm their password.
       parameters:
         - in: header
           name: jwt
@@ -121,9 +124,7 @@ paths:
             schema:
               $ref: '#/components/schemas/VerifyRequest'
             example:
-              email: user@example.com
               password: hunter2
-              userid: 42
       responses:
         '200':
           description: OK
@@ -138,7 +139,7 @@ paths:
     patch:
       tags: [PROFILE]
       summary: PROFILE - update profile
-      description: normal
+      description: normal. User is identified by JWT — no userid needed in body.
       parameters:
         - in: header
           name: jwt
@@ -166,9 +167,9 @@ paths:
       description: |
         normal
 
-        Used by two pages:
-        - ARCHIVE: returns the user's events as a list of {title, creator, id}.
-        - PROFILE: returns the user's profile {email, username, bio}.
+        Used by two pages, distinguished by the `mode` query parameter:
+        - ARCHIVE (?mode=archive): returns the user's bookmarked upcoming events as {title, creator, id}.
+        - PROFILE (?mode=profile): returns the user's public profile {email, username, bio}.
       parameters:
         - in: header
           name: jwt
@@ -179,7 +180,13 @@ paths:
           name: userid
           required: true
           schema:
-            type: integer
+            type: string
+        - in: query
+          name: mode
+          required: true
+          schema:
+            type: string
+            enum: [archive, profile]
       responses:
         '200':
           description: OK
@@ -194,8 +201,8 @@ paths:
 
     post:
       tags: [LONG DESCRIPTION]
-      summary: LONG DESCRIPTION - mark participation
-      description: normal
+      summary: LONG DESCRIPTION - mark/unmark event
+      description: normal. Adds or removes the event from the authenticated user's bookmarks.
       parameters:
         - in: header
           name: jwt
@@ -206,7 +213,7 @@ paths:
           name: userid
           required: true
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         content:
@@ -225,7 +232,7 @@ paths:
     get:
       tags: [SEARCH PAGE]
       summary: SEARCH PAGE
-      description: normal
+      description: normal. Regex search on title and/or publisher username. Paginated with page_num (0-indexed).
       parameters:
         - in: header
           name: jwt
@@ -244,6 +251,7 @@ paths:
           name: page_num
           schema:
             type: integer
+            default: 0
       responses:
         '200':
           description: OK
@@ -257,7 +265,7 @@ paths:
     post:
       tags: [PROFILE]
       summary: PROFILE - create event
-      description: verification required
+      description: Requires a verified account.
       parameters:
         - in: header
           name: jwt
@@ -295,6 +303,16 @@ components:
         password:
           type: string
 
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+
     LoginResponse:
       type: object
       properties:
@@ -306,12 +324,8 @@ components:
     VerifyRequest:
       type: object
       properties:
-        email:
-          type: string
         password:
           type: string
-        userid:
-          type: integer
 
     EventSummary:
       type: object
@@ -321,7 +335,7 @@ components:
         creator:
           type: string
         id:
-          type: integer
+          type: string
 
     EventDetail:
       type: object
@@ -335,7 +349,7 @@ components:
         creator:
           type: string
         creatorid:
-          type: integer
+          type: string
 
     SearchResult:
       type: object
@@ -345,9 +359,9 @@ components:
         title:
           type: string
         eventid:
-          type: integer
+          type: string
         creatorid:
-          type: integer
+          type: string
         creator:
           type: string
 
@@ -370,14 +384,12 @@ components:
           type: string
         bio:
           type: string
-        userid:
-          type: integer
 
     Participation:
       type: object
       properties:
-        userid:
-          type: integer
+        eventid:
+          type: string
         participating:
           type: boolean
 
@@ -389,6 +401,4 @@ components:
         description:
           type: string
         date:
-          type: string
-        creator:
           type: string
