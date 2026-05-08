@@ -1,0 +1,64 @@
+body {
+    margin: 0px;
+}
+header {
+    background-color: rgb(65, 160, 255);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 15px;
+}
+header h1 {
+    color: white;
+}
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 56px);
+    padding: 30px;
+}
+.register-body {
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    box-sizing: border-box;
+    max-width: 420px;
+    width: 100%;
+    padding: 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+.register-body h2 {
+    margin: 0 0 18px;
+}
+.register-body p {
+    margin: 0 0 24px;
+}
+.register-body form {
+    display: block;
+}
+.register-body label {
+    display: block;
+    margin-bottom: 8px;
+}
+.register-body input[type="email"],
+.register-body input[type="password"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 18px;
+    border: 1px solid rgb(208, 208, 208);
+    border-radius: 4px;
+}
+.register-body input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 4px;
+    background: rgb(65, 160, 255);
+    color: white;
+    cursor: pointer;
+}
+.register-body #message {
+    margin-top: 18px;
+}

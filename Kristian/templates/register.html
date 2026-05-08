@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalTUES</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>CalTUES</h1>
+        </nav>
+    </header>
+    <div class="register-container">
+        <div class="register-body">
+            <h2>Register</h2>
+            <p>Вече имаш акаунт? <a href="../../Marti/login.html">Login</a></p>
+            <form id="registerForm" action="/user" method="POST" class="register-form">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="example@elsys-bg.org" required><br><br>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+                
+                <input type="submit" value="Register">
+            </form>
+            <div id="message"></div>
+        </div>
+    </div>
+</body>
+</html>
