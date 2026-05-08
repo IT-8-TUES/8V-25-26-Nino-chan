@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Events — TUES Calendar</title>
+  <link rel="stylesheet" href="search.css">
+</head>
+<body>
+  <header>
+    <h1>TUES Calendar</h1>
+    <nav>
+      <a href="profile.html">My Profile</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <h2>Search Events</h2>
+      <div class="search-form">
+        <input type="text" id="title-input" placeholder="Search by title or topic...">
+        <input type="text" id="user-input" placeholder="Search by publisher...">
+        <button id="search-btn">Search</button>
+      </div>
+    </section>
+
+    <section class="results-section">
+      <div id="results-container"></div>
+      <div id="pagination" class="pagination hidden">
+        <button id="prev-btn">&#8592; Previous</button>
+        <span id="page-indicator">Page 1</span>
+        <button id="next-btn">Next &#8594;</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>
