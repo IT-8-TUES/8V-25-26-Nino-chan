@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalTUES — Archive</title>
+    <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>CalTUES</h1>
+        <nav>
+            <a href="../../Nikola/index.html">Home</a>
+            <a href="../../Nikola/search.html">Search</a>
+            <a href="./archive.html" class="active">Archive</a>
+            <a href="../../Philip/profile.html">Profile</a>
+        </nav>
+    </header>
+    <div class="archive-container">
+        <h2>Archive</h2>
+        <p class="subtitle">Your upcoming bookmarked events</p>
+        <div id="event-list"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const jwt = localStorage.getItem('jwt');
+            const userId = localStorage.getItem('user_id');
+
+            if (!jwt || !userId) {
+                window.location.href = './login.html';
+                return;
+            }
+
+            const list = document.getElementById('event-list');
+
+            try {
+                const response = await fetch(`/user/${userId}?mode=archive`, {
+                    headers: { 'jwt': jwt }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user_id');
+                    window.location.href = './login.html';
+                    return;
+                }
+
+                const events = await response.json();
+
+                if (!events || events.length === 0) {
+                    list.innerHTML = '<p class="empty-state">You have no upcoming bookmarked events.</p>';
+                    return;
+                }
+
+                events.forEach(function (event) {
+                    const card = document.createElement('div');
+                    card.className = 'event-card';
+                    card.innerHTML = `
+                        <a href="../../Nikola/event.html?id=${event.id}">${event.title}</a>
+                        <span class="creator">${event.creator}</span>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch {
+                list.innerHTML = '<p class="empty-state">Could not load your bookmarks. Please try again later.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

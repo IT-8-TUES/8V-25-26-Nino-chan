@@ -1,0 +1,175 @@
+body {
+    margin: 0px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+}
+header {
+    background-color: rgb(65, 160, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 20px 2px 15px;
+}
+header h1 {
+    color: white;
+    margin: 0;
+}
+header nav {
+    display: flex;
+    align-items: center;
+}
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+}
+header nav a:hover,
+header nav a.active {
+    opacity: 1;
+}
+
+/* Auth form (login) */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    padding: 15px;
+}
+.register-body {
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    box-sizing: border-box;
+    max-width: 420px;
+    width: 100%;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+.register-body h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+}
+.register-body p {
+    margin: 0 0 28px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+}
+.register-body form {
+    display: block;
+}
+.register-body label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2a2a2a;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+}
+.register-body input[type="email"],
+.register-body input[type="password"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: all 0.2s ease;
+}
+.register-body input[type="email"]:focus,
+.register-body input[type="password"]:focus {
+    outline: none;
+    border-color: rgb(65, 160, 255);
+    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
+}
+.register-body input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 6px;
+    background: rgb(65, 160, 255);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+}
+.register-body input[type="submit"]:hover {
+    background: rgb(52, 144, 235);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(65, 160, 255, 0.3);
+}
+.register-body input[type="submit"]:active {
+    transform: translateY(0);
+}
+.register-body #message {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #c0392b;
+}
+
+/* Archive page */
+.archive-container {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 0 15px;
+}
+.archive-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin: 0 0 4px;
+}
+.archive-container p.subtitle {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+}
+.event-card {
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.event-card a {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(65, 160, 255);
+    text-decoration: none;
+}
+.event-card a:hover {
+    text-decoration: underline;
+}
+.event-card .creator {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+.empty-state {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 60px;
+}

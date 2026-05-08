@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(Kristian/**)",
+      "Read(Philip/**)",
+      "Read(Nikola/**)"
+    ],
+    "deny": [
+      "Edit(Kristian/**)",
+      "MultiEdit(Kristian/**)",
+      "Write(Kristian/**)",
+      "Edit(Philip/**)",
+      "MultiEdit(Philip/**)",
+      "Write(Philip/**)",
+      "Edit(Nikola/**)",
+      "MultiEdit(Nikola/**)",
+      "Write(Nikola/**)",
+      "Bash"
+    ]
+  }
+}
