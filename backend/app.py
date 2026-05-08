@@ -2,6 +2,7 @@ from pathlib import Path
 
 import yaml
 from flask import Flask
+from flask_cors import CORS
 from flasgger import Swagger
 
 from events.routes import events_bp
@@ -10,6 +11,7 @@ from users.routes import users_bp
 SPEC_PATH = Path(__file__).resolve().parent.parent / "endpoints" / "endpoints.yaml"
 
 app = Flask(__name__)
+CORS(app)
 
 with open(SPEC_PATH, "r", encoding="utf-8") as f:
     template = yaml.safe_load(f)
