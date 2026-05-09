@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalTUES</title>
+    <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>CalTUES</h1>
+        <nav>
+            <a href="./index.html">Home</a>
+            <a href="../../Philip/search.html">Search</a>
+            <a href="../../Marti/archive.html">Archive</a>
+            <a href="../../Philip/profile.html">Profile</a>
+            <a href="./verify.html" class="active">Verify</a>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="card-body verify-body">
+            <h2>Request Verification</h2>
+            <p>Verified users can publish events on the platform. Confirm your password below to submit a request — the admins will receive an email and approve your account.</p>
+            <form id="verifyForm">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <input type="submit" value="Send Request">
+            </form>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const jwt = localStorage.getItem('jwt');
+            const userId = localStorage.getItem('user_id');
+            if (!jwt || !userId) {
+                window.location.href = '../../Marti/login.html';
+                return;
+            }
+
+            document.getElementById('verifyForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const password = document.getElementById('password').value;
+                const message = document.getElementById('message');
+                message.textContent = '';
+                message.className = '';
+
+                const response = await fetch('http://localhost:5000/user/verify', {
+                    method: 'POST',
+                    headers: {
+                        'jwt': jwt,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password: password })
+                });
+
+                if (response.status === 401) {
+                    message.textContent = 'Incorrect password.';
+                    message.className = 'msg-error';
+                    return;
+                }
+
+                if (response.ok) {
+                    message.textContent = 'Request sent! The admins will review and approve your account.';
+                    message.className = 'msg-success';
+                    document.getElementById('password').disabled = true;
+                    document.querySelector('input[type="submit"]').disabled = true;
+                    return;
+                }
+
+                message.textContent = 'Something went wrong. Please try again.';
+                message.className = 'msg-error';
+            });
+        });
+    </script>
+</body>
+</html>
