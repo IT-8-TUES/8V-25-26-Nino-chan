@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  background: #1a1a2e;
+  background: rgb(65, 160, 255);
   color: #fff;
   padding: 1rem 2rem;
   display: flex;
