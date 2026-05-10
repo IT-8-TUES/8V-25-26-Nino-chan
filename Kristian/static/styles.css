@@ -13,6 +13,23 @@ header h1 {
     color: white;
     margin: 0;
 }
+header nav {
+    display: flex;
+    align-items: center;
+}
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+}
+header nav a:hover,
+header nav a.active {
+    opacity: 1;
+}
 .register-container {
     display: flex;
     justify-content: center;
@@ -45,6 +62,9 @@ header h1 {
 }
 .register-body form {
     display: block;
+}
+.register-body form br {
+    display: none;
 }
 .register-body label {
     display: block;
@@ -98,4 +118,6 @@ header h1 {
 }
 .register-body #message {
     margin-top: 18px;
+    font-size: 14px;
+    color: #c0392b;
 }
