@@ -11,9 +11,9 @@
         <h1>CalTUES</h1>
         <nav>
             <a href="../Nikola/index.html">Home</a>
-            <a href="../Philip/search.html">Search</a>
+            <a href="../../Philip/search.html">Search</a>
             <a href="./archive.html" class="active">Archive</a>
-            <a href="../Philip/profile.html">Profile</a>
+            <a href="../../Philip/profile.html">Profile</a>
         </nav>
     </header>
     <div class="archive-container">
@@ -56,7 +56,7 @@
                     const card = document.createElement('div');
                     card.className = 'event-card';
                     card.innerHTML = `
-                        <a href="../../Nikola/event.html?id=${event.id}">${event.title}</a>
+                        <a href="../../Nikola/long-description.html?id=${event.id}">${event.title}</a>
                         <span class="creator">${event.creator}</span>
                     `;
                     list.appendChild(card);

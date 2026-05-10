@@ -46,7 +46,7 @@
                     localStorage.setItem('jwt', data.jwt);
                     const payload = JSON.parse(atob(data.jwt.split('.')[1]));
                     localStorage.setItem('user_id', payload.user_id);
-                    window.location.href = '../../Marti/archive.html';
+                    window.location.href = './archive.html';
                 } else {
                     message.textContent = data.message || 'Invalid email or password.';
                 }
