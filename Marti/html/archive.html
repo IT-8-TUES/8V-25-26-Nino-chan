@@ -52,11 +52,29 @@
                     return;
                 }
 
-                events.forEach(function (event) {
+                const details = await Promise.all(
+                    events.map(ev =>
+                        fetch(`http://localhost:5000/event/${ev.id}`, { headers: { 'jwt': jwt } })
+                            .then(r => r.ok ? r.json() : null)
+                            .catch(() => null)
+                    )
+                );
+
+                function formatDate(iso) {
+                    const [y, m, d] = iso.split('-');
+                    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
+                }
+
+                events.forEach(function (event, i) {
+                    const date = details[i]?.date ? formatDate(details[i].date) : '';
                     const card = document.createElement('div');
                     card.className = 'event-card';
                     card.innerHTML = `
-                        <a href="../../Nikola/long-description.html?id=${event.id}">${event.title}</a>
+                        <div class="event-info">
+                            ${date ? `<span class="event-date">${date}</span>` : ''}
+                            <a href="../../Nikola/long-description.html?id=${event.id}">${event.title}</a>
+                        </div>
                         <span class="creator">${event.creator}</span>
                     `;
                     list.appendChild(card);
