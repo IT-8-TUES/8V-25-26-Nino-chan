@@ -1,174 +1,215 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: system-ui, sans-serif;
-  background: #f4f6f9;
-  color: #1a1a2e;
-  min-height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
 }
 
 header {
-  background: rgb(65, 160, 255);
-  color: #fff;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    background-color: rgb(65, 160, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 20px 2px 15px;
 }
 
 header h1 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+    color: white;
+    margin: 0;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
 }
 
 header nav a {
-  color: #a8b4d8;
-  text-decoration: none;
-  font-size: 0.9rem;
+    color: white;
+    text-decoration: none;
+    margin-left: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.85;
+    transition: opacity 0.2s;
 }
 
-header nav a:hover {
-  color: #fff;
+header nav a:hover,
+header nav a.active {
+    opacity: 1;
 }
 
-main {
-  max-width: 760px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+/* ── Page layout ── */
+
+.search-container {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 0 15px;
 }
 
-.search-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #1a1a2e;
+.search-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin: 0 0 4px;
 }
+
+.search-container p.subtitle {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+/* ── Search form ── */
 
 .search-form {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
 }
 
-.search-form input {
-  flex: 1;
-  min-width: 180px;
-  padding: 0.6rem 0.9rem;
-  border: 1px solid #ccd3e0;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.15s;
+.search-form input[type="text"] {
+    flex: 1;
+    min-width: 160px;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: all 0.2s ease;
 }
 
-.search-form input:focus {
-  border-color: #4a6fa5;
+.search-form input[type="text"]:focus {
+    outline: none;
+    border-color: rgb(65, 160, 255);
+    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
 }
 
-.search-form button {
-  padding: 0.6rem 1.4rem;
-  background: #4a6fa5;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 0.15s;
+#search-btn {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 6px;
+    background: rgb(65, 160, 255);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
 }
 
-.search-form button:hover {
-  background: #3a5a8f;
+#search-btn:hover {
+    background: rgb(52, 144, 235);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(65, 160, 255, 0.3);
 }
+
+#search-btn:active {
+    transform: translateY(0);
+}
+
+/* ── Result cards ── */
 
 .results-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .result-item {
-  background: #fff;
-  border: 1px solid #dde3ee;
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
-  display: grid;
-  grid-template-columns: 100px 1fr auto;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  transition: box-shadow 0.15s, border-color 0.15s;
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: border-color 0.2s;
 }
 
 .result-item:hover {
-  box-shadow: 0 2px 8px rgba(74, 111, 165, 0.15);
-  border-color: #4a6fa5;
+    border-color: rgb(65, 160, 255);
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .result-date {
-  font-size: 0.8rem;
-  color: #6b7a99;
-  white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
 }
 
 .result-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #1a1a2e;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(65, 160, 255);
 }
 
 .result-creator {
-  font-size: 0.85rem;
-  color: #6b7a99;
-  white-space: nowrap;
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+    margin-left: 12px;
 }
 
-.no-results {
-  color: #6b7a99;
-  text-align: center;
-  padding: 2rem 0;
-}
+/* ── Pagination ── */
 
 .pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 .pagination button {
-  padding: 0.5rem 1.1rem;
-  background: #fff;
-  border: 1px solid #ccd3e0;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s;
+    padding: 9px 16px;
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #eef1f8;
+    border-color: rgb(65, 160, 255);
+    color: rgb(65, 160, 255);
 }
 
 .pagination button:disabled {
-  opacity: 0.4;
-  cursor: default;
+    opacity: 0.35;
+    cursor: default;
 }
 
 #page-indicator {
-  font-size: 0.9rem;
-  color: #6b7a99;
-  min-width: 60px;
-  text-align: center;
+    font-size: 14px;
+    color: #666;
+    min-width: 56px;
+    text-align: center;
+}
+
+/* ── States ── */
+
+.no-results {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 60px;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }

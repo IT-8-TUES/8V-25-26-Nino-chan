@@ -8,31 +8,30 @@
 </head>
 <body>
   <header>
-    <h1>CALtues</h1>
+    <h1>CalTUES</h1>
     <nav>
       <a href="profile.html">My Profile</a>
       <a href="..\Kristian\templates\home.html">Home</a>
+      <a href="..\Marti\html\archive.html">Archive</a>
     </nav>
   </header>
 
   <main>
-    <section class="search-section">
+    <div class="search-container">
       <h2>Search Events</h2>
+      <p class="subtitle">Search by title, topic, or publisher name.</p>
       <div class="search-form">
-        <input type="text" id="title-input" placeholder="Search by title or topic...">
-        <input type="text" id="user-input" placeholder="Search by publisher...">
+        <input type="text" id="title-input" placeholder="Title or topic...">
+        <input type="text" id="user-input" placeholder="Publisher...">
         <button id="search-btn">Search</button>
       </div>
-    </section>
-
-    <section class="results-section">
       <div id="results-container"></div>
       <div id="pagination" class="pagination hidden">
         <button id="prev-btn">&#8592; Previous</button>
         <span id="page-indicator">Page 1</span>
         <button id="next-btn">Next &#8594;</button>
       </div>
-    </section>
+    </div>
   </main>
 
   <script src="api.js"></script>

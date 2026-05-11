@@ -40,6 +40,9 @@ function renderResults(events) {
     const li = document.createElement("li");
     li.className = "result-item";
 
+    const info = document.createElement("div");
+    info.className = "result-info";
+
     const date = document.createElement("span");
     date.className = "result-date";
     date.textContent = ev.date;
@@ -48,12 +51,14 @@ function renderResults(events) {
     title.className = "result-title";
     title.textContent = ev.title;
 
+    info.appendChild(date);
+    info.appendChild(title);
+
     const creator = document.createElement("span");
     creator.className = "result-creator";
-    creator.textContent = "by " + ev.creator;
+    creator.textContent = ev.creator;
 
-    li.appendChild(date);
-    li.appendChild(title);
+    li.appendChild(info);
     li.appendChild(creator);
 
     // Update this href to match the long description page location once it exists
