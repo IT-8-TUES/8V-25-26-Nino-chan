@@ -20,6 +20,9 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="example@elsys-bg.org" required><br><br>
                 
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="username" required><br><br>
+                
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required><br><br>
                 
@@ -38,11 +41,12 @@
 
             const payload = {
                 email: registerForm.email.value.trim(),
+                username: registerForm.username.value.trim(),
                 password: registerForm.password.value,
             };
 
             try {
-                const response = await fetch('/user/register', {
+                const response = await fetch('http://localhost:5000/user/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),

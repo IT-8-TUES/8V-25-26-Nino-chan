@@ -76,7 +76,8 @@ header nav a.active {
     letter-spacing: 0.3px;
 }
 .register-body input[type="email"],
-.register-body input[type="password"] {
+.register-body input[type="password"],
+.register-body input[type="text"] {
     width: 100%;
     box-sizing: border-box;
     padding: 11px 12px;
@@ -89,7 +90,8 @@ header nav a.active {
     transition: all 0.2s ease;
 }
 .register-body input[type="email"]:focus,
-.register-body input[type="password"]:focus {
+.register-body input[type="password"]:focus,
+.register-body input[type="text"]:focus {
     outline: none;
     border-color: rgb(65, 160, 255);
     box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
