@@ -5,9 +5,10 @@ body {
 }
 header {
     background-color: rgb(65, 160, 255);
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 20px 2px 15px;
 }
 header h1 {
     color: white;
@@ -122,4 +123,140 @@ header nav a.active {
     margin-top: 18px;
     font-size: 14px;
     color: #c0392b;
+}
+
+/* Home page — calendar */
+.home-container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 15px;
+}
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.calendar-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+}
+.cal-nav {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 8px;
+    color: rgb(65, 160, 255);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.cal-nav:hover {
+    border-color: rgb(65, 160, 255);
+    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
+}
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    padding: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 28px;
+}
+.weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 6px;
+}
+.day-cell {
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.day-cell.empty {
+    visibility: hidden;
+    cursor: default;
+}
+.day-cell:hover {
+    background: rgba(65, 160, 255, 0.1);
+}
+.day-cell.today {
+    border: 1px solid rgb(65, 160, 255);
+    padding: 9px 0;
+}
+.day-cell.selected {
+    background: rgb(65, 160, 255);
+    color: white;
+    font-weight: 600;
+}
+.day-cell.selected:hover {
+    background: rgb(52, 144, 235);
+}
+.day-events h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+.day-events .subtitle {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 18px;
+}
+
+/* Event cards (shared with archive) */
+.event-card {
+    border: 1.75px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    background: white;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.event-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.event-card a {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(65, 160, 255);
+    text-decoration: none;
+}
+.event-card a:hover {
+    text-decoration: underline;
+}
+.event-card .creator {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+.empty-state {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 20px;
 }
