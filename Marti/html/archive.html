@@ -10,7 +10,7 @@
     <header>
         <h1>CalTUES</h1>
         <nav>
-            <a href="../Nikola/index.html">Home</a>
+            <a href="../../Kristian/templates/home.html">Home</a>
             <a href="../../Philip/search.html">Search</a>
             <a href="./archive.html" class="active">Archive</a>
             <a href="../../Philip/profile.html">Profile</a>
@@ -73,7 +73,7 @@
                     card.innerHTML = `
                         <div class="event-info">
                             ${date ? `<span class="event-date">${date}</span>` : ''}
-                            <a href="../../Nikola/long-description.html?id=${event.id}">${event.title}</a>
+                            <a href="../../Nikola/templates/long-description.html?id=${event.id}">${event.title}</a>
                         </div>
                         <span class="creator">${event.creator}</span>
                     `;
