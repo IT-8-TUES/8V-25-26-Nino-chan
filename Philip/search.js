@@ -63,7 +63,7 @@ function renderResults(events) {
 
     // Update this href to match the long description page location once it exists
     li.addEventListener("click", () => {
-      window.location.href = `../event.html?id=${ev.eventid}`;
+      window.location.href = `../Nikola/templates/long-description?id=${ev.eventid}`;
     });
 
     ul.appendChild(li);
