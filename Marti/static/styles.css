@@ -126,7 +126,7 @@ header nav a.active {
 .archive-container {
     max-width: 640px;
     margin: 40px auto;
-    padding: 0 15px;
+    padding: 0 15px 60px;
 }
 .archive-container h2 {
     font-size: 24px;
@@ -182,4 +182,17 @@ header nav a.active {
     color: #666;
     font-size: 14px;
     margin-top: 60px;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid rgb(208, 208, 208);
+    text-align: center;
+    padding: 14px 15px;
+    font-size: 13px;
+    color: #999;
+    z-index: 10;
 }
