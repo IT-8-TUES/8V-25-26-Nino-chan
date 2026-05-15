@@ -21,7 +21,7 @@ def find_by_date(date: str) -> list:
 
 
 def find_upcoming_by_ids(ids: list, from_date: str) -> list:
-    return [Event.from_doc(d) for d in db.events.find({"_id": {"$in": ids}, "date": {"$gte": from_date}})]
+    return [Event.from_doc(d) for d in db.events.find({"_id": {"$in": ids}, "date": {"$gte": from_date}}).sort("date", 1)]
 
 
 def search(title: str = "", user: str = "", page_num: int = 0) -> list:
