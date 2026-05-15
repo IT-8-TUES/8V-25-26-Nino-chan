@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CalTUES — Home</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <header>
         <h1>CalTUES</h1>
         <nav>
             <a href="./home.html" class="active">Home</a>
-            <a href="../../Philip/search.html">Search</a>
-            <a href="../../Marti/html/archive.html">Archive</a>
-            <a href="../../Philip/profile.html">Profile</a>
+            <a href="../Philip/search.html">Search</a>
+            <a href="../Marti/html/archive.html">Archive</a>
+            <a href="../Philip/profile.html">Profile</a>
         </nav>
     </header>
 
@@ -33,12 +33,16 @@
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 CalTUES &middot; TUES</p>
+    </footer>
+
     <script>
         const jwt = localStorage.getItem('jwt');
         const userId = localStorage.getItem('user_id');
 
         if (!jwt || !userId) {
-            window.location.href = '../../Marti/html/login.html';
+            window.location.href = '../Marti/html/login.html';
         }
 
         const monthNames = ['January','February','March','April','May','June',
@@ -138,7 +142,7 @@
                 if (response.status === 401) {
                     localStorage.removeItem('jwt');
                     localStorage.removeItem('user_id');
-                    window.location.href = '../../Marti/html/login.html';
+                    window.location.href = '../Marti/html/login.html';
                     return;
                 }
 
@@ -155,7 +159,7 @@
                     card.className = 'event-card';
                     card.innerHTML = `
                         <div class="event-info">
-                            <a href="../../Nikola/templates/long-description.html?id=${ev.id}">${ev.title}</a>
+                            <a href="../Nikola/templates/long-description.html?id=${ev.id}">${ev.title}</a>
                         </div>
                         <span class="creator">${ev.creator}</span>
                     `;
