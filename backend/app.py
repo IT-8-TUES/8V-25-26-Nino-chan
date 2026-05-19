@@ -38,4 +38,5 @@ app.register_blueprint(events_bp)
 app.register_blueprint(users_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host="localhost", port=5000)
