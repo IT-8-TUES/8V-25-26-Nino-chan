@@ -9,7 +9,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-const URI         = process.env.MONGO_URI || "mongodb+srv://dbAdmin:B-Ars}h!hLg(Tksc@tuescalendarit.h5fguyf.mongodb.net/?appName=TuesCalendarIT";
+const URI         = process.env.MONGO_URI;
 const DB_NAME     = process.env.MONGO_DB  || "TuesCalendar";
 const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://localhost:11434";
 
