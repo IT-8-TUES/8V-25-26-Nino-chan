@@ -1,11 +1,12 @@
 class Event:
-    def __init__(self, title, description, date, creator_id, creator_username, _id=None):
+    def __init__(self, title, description, date, creator_id, creator_username, embedding=[0 for i in range(768)],_id=None):
         self._id = _id
         self.title = title
         self.description = description
         self.date = date
         self.creator_id = creator_id
         self.creator_username = creator_username
+        self.embedding = embedding
 
     @staticmethod
     def from_doc(doc):
@@ -16,4 +17,5 @@ class Event:
             date=doc["date"],
             creator_id=doc["creator_id"],
             creator_username=doc["creator_username"],
+            embedding=doc["embedding"]
         )

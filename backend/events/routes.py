@@ -30,3 +30,11 @@ def create_event():
     data = request.get_json()
     event_service.create(g.user, data["title"], data["description"], data["date"])
     return jsonify({"code": 200})
+
+
+@events_bp.route("/vibeSearch", methods=["GET"])
+@auth.require_auth
+def recomend():
+    prompt = request.args.get("prompt", "")
+    print("maybe it is an error here")
+    return jsonify(event_service.vibeSearch(str(g.user._id), prompt))

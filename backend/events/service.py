@@ -1,8 +1,13 @@
 import re
 
+from datetime import date as date_type
+
 from events import repository as event_repo
 from events.model import Event
+from users import repository as user_repo
 from users.model import User
+
+from APIs.embedding import embed
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -35,6 +40,24 @@ def search(title: str, user: str, page_num: int) -> list:
     } for e in evs]
 
 
+def vibeSearch(user_id, prompt):
+    if prompt == "" or prompt==None:
+        user = user_repo.find_by_id(user_id)
+        vector = embed(user.preference)
+    else:
+        vector = embed(prompt)
+
+    today = date_type.today().isoformat()
+
+    return [{
+        "title": doc["title"],
+        "creator": doc["creator_username"],
+        "date": doc["date"],
+        "id": str(doc["_id"]),
+    } for doc in event_repo.vectorSearch(vector, today)]
+
+
+
 def create(user: User, title: str, description: str, event_date: str):
     event_repo.insert(Event(
         title=title,
@@ -42,4 +65,6 @@ def create(user: User, title: str, description: str, event_date: str):
         date=event_date,
         creator_id=user._id,
         creator_username=user.username,
+        embedding=embed(description)
+
     ))

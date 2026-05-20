@@ -34,3 +34,6 @@ package-lock.json
 # Claude
 CLAUDE.md
 .claude/
+
+# Docker volumes (local data, not committed)
+data/
