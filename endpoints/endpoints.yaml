@@ -237,9 +237,9 @@ paths:
         normal. Returns the top 5 upcoming events most semantically similar to the
         given prompt. If no prompt is provided, uses the authenticated user's saved
         preference string instead. Similarity is computed via vector search on a
-        768-dimensional `nomic-embed-text` embedding stored on each event.
+        1024-dimensional `mxbai-embed-large` embedding stored on each event.
 
-        Requires a MongoDB Atlas `vector_index` on the `events.embedding` field.
+        Requires a MongoDB Atlas `cosine_index` on the `events.embedding` field.
       parameters:
         - in: header
           name: jwt

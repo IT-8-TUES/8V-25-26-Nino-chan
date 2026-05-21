@@ -16,11 +16,14 @@ const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://localhost:11434";
 // All seed accounts use this password.
 const SEED_PASSWORD = "password123";
 
-async function embed(prompt) {
+async function embed(text, task = "document") {
+  const prompt = task === "query"
+    ? "Represent this sentence for searching relevant passages: " + text
+    : text;
   const res = await fetch(`${OLLAMA_HOST}/api/embeddings`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "nomic-embed-text", prompt }),
+    body: JSON.stringify({ model: "mxbai-embed-large", prompt }),
   });
   if (!res.ok) {
     throw new Error(`Ollama embed failed (${res.status}): ${await res.text()}`);
@@ -114,7 +117,7 @@ async function seed() {
   console.log(`Embedding ${events.length} event descriptions via ${OLLAMA_HOST}...`);
   const eventDocs = await Promise.all(events.map(async (e) => ({
     ...e,
-    embedding: await embed(e.description),
+    embedding: await embed(e.description, "document"),
   })));
   await db.collection("events").insertMany(eventDocs);
   console.log("Inserted 6 events (4 upcoming, 2 past).");
@@ -166,7 +169,7 @@ async function seed() {
   console.log(`Embedding ${users.length} user preferences...`);
   const userDocs = await Promise.all(users.map(async (u) => ({
     ...u,
-    embedding: await embed(u.pref),
+    embedding: await embed(u.pref, "query"),
   })));
   await db.collection("users").insertMany(userDocs);
   console.log("Inserted 4 users (2 verified, 2 unverified). Password for all: " + SEED_PASSWORD);

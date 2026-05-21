@@ -10,7 +10,7 @@ services:
     entrypoint: ["/bin/sh", "/ollama-init.sh"]
     healthcheck:
       # Healthy only once the model is actually pulled
-      test: ["CMD-SHELL", "ollama list | grep -q nomic-embed-text"]
+      test: ["CMD-SHELL", "ollama list | grep -q mxbai-embed-large"]
       interval: 10s
       timeout: 5s
       retries: 30

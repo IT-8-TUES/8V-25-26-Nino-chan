@@ -11,7 +11,7 @@ def index():
                     {
                         "type": "vector",
                         "path": "embedding",
-                        "numDimensions": 768,
+                        "numDimensions": 1024,
                         "similarity": "cosine"
                     },
                     {

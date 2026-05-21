@@ -43,9 +43,9 @@ def search(title: str, user: str, page_num: int) -> list:
 def vibeSearch(user_id, prompt):
     if prompt == "" or prompt==None:
         user = user_repo.find_by_id(user_id)
-        vector = embed(user.preference)
+        vector = embed(user.preference, task="query")
     else:
-        vector = embed(prompt)
+        vector = embed(prompt, task="query")
 
     today = date_type.today().isoformat()
 
@@ -65,6 +65,6 @@ def create(user: User, title: str, description: str, event_date: str):
         date=event_date,
         creator_id=user._id,
         creator_username=user.username,
-        embedding=embed(description)
+        embedding=embed(description, task="document")
 
     ))
