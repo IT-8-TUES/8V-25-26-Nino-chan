@@ -171,6 +171,7 @@ async function seed() {
       username:      "trajkov",
       password_hash: hash,
       bio:           "12th grade. Interested in cybersecurity.",
+      pref:          "Systems programming, networking and OS",
       verified:      false,
       bookmarks:     [eventId.cybersec],
     }
