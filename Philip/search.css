@@ -1,19 +1,31 @@
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #333;
+    color: #e6e8ec;
+    background: #1a1d23;
+    min-height: 100vh;
 }
 
 header {
-    background-color: rgb(65, 160, 255);
+    background-color: #0f1c2e;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px 20px 2px 15px;
+    padding: 10px 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 header h1 {
-    color: white;
+    color: #e6e8ec;
     margin: 0;
 }
 
@@ -23,13 +35,26 @@ header nav {
 }
 
 header nav a {
-    color: white;
+    color: #e6e8ec;
     text-decoration: none;
-    margin-left: 16px;
+    margin-left: 20px;
     font-size: 14px;
     font-weight: 500;
-    opacity: 0.85;
+    opacity: 0.75;
+    position: relative;
     transition: opacity 0.2s;
+}
+
+header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgb(40, 130, 220);
+    border-radius: 2px;
+    transition: width 0.25s ease;
 }
 
 header nav a:hover,
@@ -37,27 +62,32 @@ header nav a.active {
     opacity: 1;
 }
 
+header nav a:hover::after,
+header nav a.active::after {
+    width: 100%;
+}
+
 /* ── Page layout ── */
 
 .search-container {
-    max-width: 640px;
-    margin: 40px auto;
-    padding: 0 15px;
+    max-width: 660px;
+    margin: 44px auto;
+    padding: 0 16px 70px;
 }
 
 .search-container h2 {
     font-size: 24px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #e6e8ec;
     letter-spacing: -0.5px;
     margin: 0 0 4px;
 }
 
 .search-container p.subtitle {
-    color: #666;
+    color: #8b919e;
     font-size: 14px;
     line-height: 1.5;
-    margin: 0 0 20px;
+    margin: 0 0 24px;
 }
 
 /* ── Search form ── */
@@ -74,41 +104,50 @@ header nav a.active {
     min-width: 160px;
     box-sizing: border-box;
     padding: 11px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    background: #1a1d23;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
+    color: #e6e8ec;
     line-height: 1.5;
     transition: all 0.2s ease;
 }
 
+.search-form input[type="text"]::placeholder {
+    color: #5a6070;
+}
+
 .search-form input[type="text"]:focus {
     outline: none;
-    border-color: rgb(65, 160, 255);
-    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
+    border-color: rgb(40, 130, 220);
+    box-shadow: 0 0 0 3px rgba(40, 130, 220, 0.2);
 }
 
 #search-btn {
     padding: 11px 20px;
     border: none;
-    border-radius: 6px;
-    background: rgb(65, 160, 255);
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgb(40,130,220) 0%, rgb(70,160,250) 50%, rgb(40,130,220) 100%);
+    background-size: 200% auto;
     color: white;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.3px;
-    transition: all 0.2s ease;
+    transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 #search-btn:hover {
-    background: rgb(52, 144, 235);
+    animation: shimmer 1.2s linear infinite;
+    box-shadow: 0 6px 18px rgba(40, 130, 220, 0.45);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(65, 160, 255, 0.3);
 }
 
 #search-btn:active {
-    transform: translateY(0);
+    transform: scale(0.98) translateY(0);
+    box-shadow: none;
+    animation: none;
 }
 
 /* ── Result cards ── */
@@ -120,21 +159,23 @@ header nav a.active {
 }
 
 .result-item {
-    border: 1.75px solid rgb(208, 208, 208);
+    border-left: 4px solid rgb(40, 130, 220);
     border-radius: 10px;
-    background: white;
+    background: #23272f;
     padding: 16px 20px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeInUp 0.35s ease both;
 }
 
 .result-item:hover {
-    border-color: rgb(65, 160, 255);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(40, 130, 220, 0.22);
 }
 
 .result-info {
@@ -146,18 +187,18 @@ header nav a.active {
 .result-date {
     font-size: 12px;
     font-weight: 500;
-    color: #999;
+    color: #5a6070;
 }
 
 .result-title {
     font-size: 16px;
     font-weight: 600;
-    color: rgb(65, 160, 255);
+    color: rgb(40, 130, 220);
 }
 
 .result-creator {
     font-size: 13px;
-    color: #666;
+    color: #8b919e;
     white-space: nowrap;
     margin-left: 12px;
 }
@@ -174,10 +215,10 @@ header nav a.active {
 
 .pagination button {
     padding: 9px 16px;
-    border: 1.75px solid rgb(208, 208, 208);
-    border-radius: 6px;
-    background: white;
-    color: #333;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
+    background: #23272f;
+    color: #8b919e;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -185,8 +226,8 @@ header nav a.active {
 }
 
 .pagination button:hover:not(:disabled) {
-    border-color: rgb(65, 160, 255);
-    color: rgb(65, 160, 255);
+    border-color: rgb(40, 130, 220);
+    color: rgb(40, 130, 220);
 }
 
 .pagination button:disabled {
@@ -196,7 +237,7 @@ header nav a.active {
 
 #page-indicator {
     font-size: 14px;
-    color: #666;
+    color: #8b919e;
     min-width: 56px;
     text-align: center;
 }
@@ -205,11 +246,26 @@ header nav a.active {
 
 .no-results {
     text-align: center;
-    color: #666;
+    color: #8b919e;
     font-size: 14px;
     margin-top: 60px;
 }
 
 .hidden {
     display: none;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(26, 29, 35, 0.92);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid #2e3340;
+    text-align: center;
+    padding: 14px 15px;
+    font-size: 13px;
+    color: #5a6070;
+    z-index: 10;
 }

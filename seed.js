@@ -49,6 +49,7 @@ async function seed() {
     maria:  new ObjectId(),
     stefan: new ObjectId(),
     elena:  new ObjectId(),
+    trajkov: new ObjectId(),
   };
 
   // --- Event IDs ---
@@ -164,7 +165,17 @@ async function seed() {
       verified:      false,
       bookmarks:     [eventId.react, eventId.cybersec],
     },
+        {
+      _id:           userId.trajkov,
+      email:         "trajkov@tues.bg",
+      username:      "trajkov",
+      password_hash: hash,
+      bio:           "12th grade. Interested in cybersecurity.",
+      verified:      false,
+      bookmarks:     [eventId.cybersec],
+    }
   ];
+  
 
   console.log(`Embedding ${users.length} user preferences...`);
   const userDocs = await Promise.all(users.map(async (u) => ({
@@ -172,6 +183,7 @@ async function seed() {
     embedding: await embed(u.pref, "query"),
   })));
   await db.collection("users").insertMany(userDocs);
+
   console.log("Inserted 4 users (2 verified, 2 unverified). Password for all: " + SEED_PASSWORD);
 
   await client.close();

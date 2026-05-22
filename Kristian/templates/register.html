@@ -17,55 +17,21 @@
             <form id="registerForm" class="register-form">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="example@elsys-bg.org" required><br><br>
-                
+
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Username" required><br><br>
-                
+
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required><br><br>
-                
+
                 <input type="submit" value="Register">
             </form>
             <div id="message"></div>
         </div>
     </div>
-    <script>
-        const registerForm = document.getElementById('registerForm');
-        const messageEl = document.getElementById('message');
-
-        registerForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            messageEl.textContent = '';
-
-            const payload = {
-                email: registerForm.email.value.trim(),
-                username: registerForm.username.value.trim(),
-                password: registerForm.password.value,
-            };
-
-            try {
-                const response = await fetch('http://localhost:5000/user/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.code === 200) {
-                    window.location.href = '../../Marti/html/login.html';
-                    return;
-                }
-
-                if (result.code === 409) {
-                    messageEl.textContent = 'A user with that email already exists.';
-                } else {
-                    messageEl.textContent = 'Registration failed. Please try again.';
-                }
-            } catch (error) {
-                messageEl.textContent = 'Unable to complete registration. Check your connection.';
-            }
-        });
-    </script>
+    <footer>
+        <p>&copy; 2026 CalTUES &middot; TUES</p>
+    </footer>
+    <script src="../javascript/register.js"></script>
 </body>
 </html>

@@ -5,7 +5,11 @@ from bson import ObjectId
 import db
 from events.model import Event
 
+from datetime import date as date_type
+
 _PAGE_SIZE = 10
+
+
 
 
 def find_by_id(event_id: str) -> Optional[Event]:
@@ -25,7 +29,8 @@ def find_upcoming_by_ids(ids: list, from_date: str) -> list:
 
 
 def search(title: str = "", user: str = "", page_num: int = 0) -> list:
-    query = {}
+    today = date_type.today().isoformat()
+    query = {"date": {"$gte":today}}
     if title:
         query["title"] = {"$regex": title, "$options": "i"}
     if user:

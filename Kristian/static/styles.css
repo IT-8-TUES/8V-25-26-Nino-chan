@@ -1,17 +1,30 @@
-body {
-    margin: 0px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #333;
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
 }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #e6e8ec;
+    background: #1a1d23;
+    min-height: 100vh;
+}
+
 header {
-    background-color: rgb(65, 160, 255);
+    background-color: #0f1c2e;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px 20px 2px 15px;
+    padding: 10px 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 header h1 {
-    color: white;
+    color: #e6e8ec;
     margin: 0;
 }
 header nav {
@@ -19,47 +32,72 @@ header nav {
     align-items: center;
 }
 header nav a {
-    color: white;
+    color: #e6e8ec;
     text-decoration: none;
-    margin-left: 16px;
+    margin-left: 20px;
     font-size: 14px;
     font-weight: 500;
-    opacity: 0.85;
+    opacity: 0.75;
+    position: relative;
     transition: opacity 0.2s;
+}
+header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgb(40, 130, 220);
+    border-radius: 2px;
+    transition: width 0.25s ease;
 }
 header nav a:hover,
 header nav a.active {
     opacity: 1;
 }
+header nav a:hover::after,
+header nav a.active::after {
+    width: 100%;
+}
+
+/* Register page */
 .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 80px);
-    padding: 15px;
+    min-height: calc(100vh - 60px);
+    padding: 20px;
 }
 .register-body {
-    border: 1.75px solid rgb(208, 208, 208);
-    border-radius: 10px;
-    background: white;
-    box-sizing: border-box;
+    background: #23272f;
+    border-radius: 14px;
+    border-top: 3px solid rgb(40, 130, 220);
     max-width: 420px;
     width: 100%;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 32px 28px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
 }
 .register-body h2 {
     margin: 0 0 12px;
     font-size: 24px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #e6e8ec;
     letter-spacing: -0.5px;
 }
 .register-body p {
     margin: 0 0 28px;
     font-size: 14px;
     line-height: 1.5;
-    color: #666;
+    color: #8b919e;
+}
+.register-body p a {
+    color: rgb(40, 130, 220);
+    text-decoration: none;
+}
+.register-body p a:hover {
+    text-decoration: underline;
 }
 .register-body form {
     display: block;
@@ -72,7 +110,7 @@ header nav a.active {
     margin-bottom: 8px;
     font-size: 13px;
     font-weight: 500;
-    color: #2a2a2a;
+    color: #c0c5cf;
     text-transform: capitalize;
     letter-spacing: 0.3px;
 }
@@ -83,53 +121,63 @@ header nav a.active {
     box-sizing: border-box;
     padding: 11px 12px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    background: #1a1d23;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
+    color: #e6e8ec;
     line-height: 1.5;
     transition: all 0.2s ease;
+}
+.register-body input[type="email"]::placeholder,
+.register-body input[type="password"]::placeholder,
+.register-body input[type="text"]::placeholder {
+    color: #5a6070;
 }
 .register-body input[type="email"]:focus,
 .register-body input[type="password"]:focus,
 .register-body input[type="text"]:focus {
     outline: none;
-    border-color: rgb(65, 160, 255);
-    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
+    border-color: rgb(40, 130, 220);
+    box-shadow: 0 0 0 3px rgba(40, 130, 220, 0.2);
 }
 .register-body input[type="submit"] {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     margin-top: 12px;
     border: none;
-    border-radius: 6px;
-    background: rgb(65, 160, 255);
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgb(40,130,220) 0%, rgb(70,160,250) 50%, rgb(40,130,220) 100%);
+    background-size: 200% auto;
     color: white;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.3px;
-    transition: all 0.2s ease;
+    transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 .register-body input[type="submit"]:hover {
-    background: rgb(52, 144, 235);
+    animation: shimmer 1.2s linear infinite;
+    box-shadow: 0 6px 18px rgba(40, 130, 220, 0.45);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(65, 160, 255, 0.3);
 }
 .register-body input[type="submit"]:active {
-    transform: translateY(0);
+    transform: scale(0.98) translateY(0);
+    box-shadow: none;
+    animation: none;
 }
 .register-body #message {
     margin-top: 18px;
     font-size: 14px;
-    color: #c0392b;
+    color: #e05c5c;
 }
 
-/* Home page — calendar */
+/* Home / Calendar page */
 .home-container {
     max-width: 720px;
     margin: 40px auto;
-    padding: 0 15px;
+    padding: 0 16px 70px;
 }
 .calendar-header {
     display: flex;
@@ -141,42 +189,46 @@ header nav a.active {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #e6e8ec;
     letter-spacing: -0.5px;
 }
 .cal-nav {
     width: 36px;
     height: 36px;
-    background: white;
-    border: 1.75px solid rgb(208, 208, 208);
+    background: #23272f;
+    border: 1px solid #2e3340;
     border-radius: 8px;
-    color: rgb(65, 160, 255);
-    font-size: 18px;
+    color: rgb(40, 130, 220);
+    font-size: 20px;
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .cal-nav:hover {
-    border-color: rgb(65, 160, 255);
-    box-shadow: 0 0 0 3px rgba(65, 160, 255, 0.1);
+    border-color: rgb(40, 130, 220);
+    box-shadow: 0 0 0 3px rgba(40, 130, 220, 0.2);
+    background: linear-gradient(90deg, rgb(40,130,220) 0%, rgb(70,160,250) 50%, rgb(40,130,220) 100%);
+    background-size: 200% auto;
+    animation: shimmer 1.2s linear infinite;
+    color: white;
 }
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
-    border: 1.75px solid rgb(208, 208, 208);
-    border-radius: 10px;
-    background: white;
+    border: 1px solid #2e3340;
+    border-radius: 12px;
+    background: #23272f;
     padding: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     margin-bottom: 28px;
 }
 .weekday {
     text-align: center;
     font-size: 12px;
     font-weight: 600;
-    color: #999;
+    color: #5a6070;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding-bottom: 6px;
@@ -186,7 +238,7 @@ header nav a.active {
     padding: 10px 0;
     border-radius: 8px;
     font-size: 14px;
-    color: #333;
+    color: #c0c5cf;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
 }
@@ -195,44 +247,51 @@ header nav a.active {
     cursor: default;
 }
 .day-cell:hover {
-    background: rgba(65, 160, 255, 0.1);
+    background: rgba(40, 130, 220, 0.15);
+    color: #e6e8ec;
 }
 .day-cell.today {
-    border: 1px solid rgb(65, 160, 255);
+    border: 1px solid rgb(40, 130, 220);
+    color: rgb(40, 130, 220);
+    font-weight: 600;
     padding: 9px 0;
 }
 .day-cell.selected {
-    background: rgb(65, 160, 255);
+    background: rgb(40, 130, 220);
     color: white;
     font-weight: 600;
 }
 .day-cell.selected:hover {
-    background: rgb(52, 144, 235);
+    background: rgb(30, 110, 195);
 }
 .day-events h3 {
     margin: 0 0 4px;
     font-size: 18px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #e6e8ec;
 }
 .day-events .subtitle {
-    color: #666;
+    color: #8b919e;
     font-size: 14px;
     line-height: 1.5;
     margin: 0 0 18px;
 }
-
-/* Event cards (shared with archive) */
 .event-card {
-    border: 1.75px solid rgb(208, 208, 208);
+    border-left: 4px solid rgb(40, 130, 220);
     border-radius: 10px;
-    background: white;
+    background: #23272f;
     padding: 16px 20px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeInUp 0.35s ease both;
+}
+.event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(40, 130, 220, 0.22);
 }
 .event-info {
     display: flex;
@@ -242,7 +301,7 @@ header nav a.active {
 .event-card a {
     font-size: 16px;
     font-weight: 600;
-    color: rgb(65, 160, 255);
+    color: rgb(40, 130, 220);
     text-decoration: none;
 }
 .event-card a:hover {
@@ -250,13 +309,28 @@ header nav a.active {
 }
 .event-card .creator {
     font-size: 13px;
-    color: #666;
+    color: #8b919e;
     white-space: nowrap;
     margin-left: 12px;
 }
 .empty-state {
     text-align: center;
-    color: #666;
+    color: #8b919e;
     font-size: 14px;
     margin-top: 20px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(26, 29, 35, 0.92);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid #2e3340;
+    text-align: center;
+    padding: 14px 15px;
+    font-size: 13px;
+    color: #5a6070;
+    z-index: 10;
 }
