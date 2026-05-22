@@ -2,15 +2,35 @@
 // Run: node seed.js
 // Requires: npm install mongodb bcryptjs dotenv
 
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 const { MongoClient, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-const URI     = process.env.MONGO_URI || "mongodb://localhost:27017";
-const DB_NAME = process.env.MONGO_DB  || "tues_calendar";
+const URI         = process.env.MONGO_URI;
+const DB_NAME     = process.env.MONGO_DB  || "TuesCalendar";
+const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://localhost:11434";
 
 // All seed accounts use this password.
 const SEED_PASSWORD = "password123";
+
+async function embed(text, task = "document") {
+  const prompt = task === "query"
+    ? "Represent this sentence for searching relevant passages: " + text
+    : text;
+  const res = await fetch(`${OLLAMA_HOST}/api/embeddings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "mxbai-embed-large", prompt }),
+  });
+  if (!res.ok) {
+    throw new Error(`Ollama embed failed (${res.status}): ${await res.text()}`);
+  }
+  const data = await res.json();
+  return data.embedding;
+}
 
 async function seed() {
   const client = new MongoClient(URI);
@@ -44,7 +64,7 @@ async function seed() {
 
   // --- Events ---
   // Dates relative to seed date (2026-05-07): past = before, future = after.
-  await db.collection("events").insertMany([
+  const events = [
     {
       _id:              eventId.python,
       title:            "Python Workshop for Beginners",
@@ -93,17 +113,25 @@ async function seed() {
       creator_id:       userId.maria,
       creator_username: "mariag",
     },
-  ]);
+  ];
+
+  console.log(`Embedding ${events.length} event descriptions via ${OLLAMA_HOST}...`);
+  const eventDocs = await Promise.all(events.map(async (e) => ({
+    ...e,
+    embedding: await embed(e.description, "document"),
+  })));
+  await db.collection("events").insertMany(eventDocs);
   console.log("Inserted 6 events (4 upcoming, 2 past).");
 
   // --- Users ---
-  await db.collection("users").insertMany([
+  const users = [
     {
       _id:           userId.ivan,
       email:         "ivan.petrov@tues.bg",
       username:      "ivanpetrov",
       password_hash: hash,
       bio:           "Teacher at TUES. Organises programming workshops and loves Python.",
+      pref:          "Python programming, beginner-friendly coding workshops, software development tutorials.",
       verified:      true,
       bookmarks:     [],
     },
@@ -113,6 +141,7 @@ async function seed() {
       username:      "mariag",
       password_hash: hash,
       bio:           "Robotics and embedded systems enthusiast. Club president.",
+      pref:          "Robotics, embedded systems, hardware projects, sensors, microcontrollers, Arduino.",
       verified:      true,
       bookmarks:     [eventId.python],
     },
@@ -122,6 +151,7 @@ async function seed() {
       username:      "stefand",
       password_hash: hash,
       bio:           "10th grade student interested in web development.",
+      pref:          "Web development, frontend frameworks, React, JavaScript, building single-page applications.",
       verified:      false,
       bookmarks:     [eventId.python, eventId.robotics, eventId.cybersec],
     },
@@ -131,10 +161,11 @@ async function seed() {
       username:      "elenat",
       password_hash: hash,
       bio:           "11th grade. Into AI and competitive programming.",
+      pref:          "Artificial intelligence, machine learning, neural networks, competitive programming, algorithms.",
       verified:      false,
       bookmarks:     [eventId.react, eventId.cybersec],
     },
-    {
+        {
       _id:           userId.trajkov,
       email:         "trajkov@tues.bg",
       username:      "trajkov",
@@ -143,7 +174,16 @@ async function seed() {
       verified:      false,
       bookmarks:     [eventId.cybersec],
     }
-  ]);
+  ];
+  
+
+  console.log(`Embedding ${users.length} user preferences...`);
+  const userDocs = await Promise.all(users.map(async (u) => ({
+    ...u,
+    embedding: await embed(u.pref, "query"),
+  })));
+  await db.collection("users").insertMany(userDocs);
+
   console.log("Inserted 4 users (2 verified, 2 unverified). Password for all: " + SEED_PASSWORD);
 
   await client.close();

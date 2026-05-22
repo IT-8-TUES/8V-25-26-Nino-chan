@@ -36,7 +36,7 @@ def request_verification(user: User, password: str) -> bool:
 
 
 def update_profile(user: User, fields: dict):
-    allowed = {k: fields[k] for k in ("email", "username", "bio") if k in fields}
+    allowed = {k: fields[k] for k in ("email", "username", "bio", "preference") if k in fields}
     if allowed:
         user_repo.update_fields(str(user._id), allowed)
 

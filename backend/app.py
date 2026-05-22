@@ -7,6 +7,7 @@ from flasgger import Swagger
 
 from events.routes import events_bp
 from users.routes import users_bp
+from initDB import index
 
 SPEC_PATH = Path(__file__).resolve().parent.parent / "endpoints" / "endpoints.yaml"
 
@@ -34,9 +35,12 @@ swagger_config = {
 
 Swagger(app, template=template, config=swagger_config)
 
+index()
+
 app.register_blueprint(events_bp)
 app.register_blueprint(users_bp)
 
 if __name__ == "__main__":
     from waitress import serve
     serve(app, host="localhost", port=5000)
+

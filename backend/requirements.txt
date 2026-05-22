@@ -1,0 +1,2 @@
+# Use backend-requirements.txt in the project root instead.
+# This file should not be used directly.
