@@ -1,4 +1,5 @@
 from datetime import date as date_type
+from APIs.embedding import embed
 
 import bcrypt
 from bson import ObjectId
@@ -36,7 +37,10 @@ def request_verification(user: User, password: str) -> bool:
 
 
 def update_profile(user: User, fields: dict):
-    allowed = {k: fields[k] for k in ("email", "username", "bio", "preference") if k in fields}
+    allowed = {k: fields[k] for k in ("email", "username", "bio") if k in fields}
+    if "pref" in fields:
+        allowed["pref"]=fields["pref"]
+        allowed["embedding"]=embed(fields["pref"])
     if allowed:
         user_repo.update_fields(str(user._id), allowed)
 
@@ -45,7 +49,7 @@ def get_profile(user_id: str):
     user = user_repo.find_by_id(user_id)
     if not user:
         return None
-    return {"email": user.email, "username": user.username, "bio": user.bio}
+    return {"email": user.email, "username": user.username, "bio": user.bio, "pref": user.preference}
 
 
 def get_archive(user_id: str):

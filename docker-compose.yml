@@ -7,7 +7,7 @@ services:
     volumes:
       - ./data/ollama:/root/.ollama
       - ./docker/ollama-init.sh:/ollama-init.sh
-    entrypoint: ["/bin/sh", "/ollama-init.sh"]
+    entrypoint: ["/bin/sh", "-c", "tr -d '\\r' < /ollama-init.sh | /bin/sh"]
     healthcheck:
       # Healthy only once the model is actually pulled
       test: ["CMD-SHELL", "ollama list | grep -q mxbai-embed-large"]

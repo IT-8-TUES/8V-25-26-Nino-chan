@@ -41,6 +41,8 @@ app.register_blueprint(events_bp)
 app.register_blueprint(users_bp)
 
 if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host="localhost", port=5000)
-
+    from granian import Granian
+    threads = 1
+    Granian("app:app", address="0.0.0.0", port=5000, interface="wsgi", blocking_threads=threads).serve()
+    #from waitress import serve
+    #serve(app, host="localhost", port=5000)
