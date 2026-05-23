@@ -76,7 +76,6 @@ header nav a.active::after {
     animation: fadeInUp 0.35s ease both;
 }
 
-/* Event detail page */
 .detail-body h2 {
     margin: 0 0 12px;
     font-size: 24px;
@@ -147,7 +146,6 @@ header nav a.active::after {
     transform: translateY(-1px);
 }
 
-/* Verify page */
 .verify-body h2 {
     margin: 0 0 12px;
     font-size: 24px;
