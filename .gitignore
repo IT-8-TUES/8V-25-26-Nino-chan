@@ -31,9 +31,10 @@ node_modules/
 package.json
 package-lock.json
 
-# Claude
+# Claude and AI agents
 CLAUDE.md
 .claude/
+.codegraph
 
 # Docker volumes (local data, not committed)
 data/
