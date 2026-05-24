@@ -33,25 +33,32 @@ function renderResults(events) {
     return;
   }
 
-  const ul = document.createElement("ul");
-  ul.className = "results-list";
+  let currentDate = null;
+  let ul = null;
 
   for (const ev of events) {
+    if (ev.date !== currentDate) {
+      currentDate = ev.date;
+      const header = document.createElement("h3");
+      header.className = "results-date-header";
+      header.textContent = ev.date;
+      resultsContainer.appendChild(header);
+
+      ul = document.createElement("ul");
+      ul.className = "results-list";
+      resultsContainer.appendChild(ul);
+    }
+
     const li = document.createElement("li");
     li.className = "result-item";
 
     const info = document.createElement("div");
     info.className = "result-info";
 
-    const date = document.createElement("span");
-    date.className = "result-date";
-    date.textContent = ev.date;
-
     const title = document.createElement("span");
     title.className = "result-title";
     title.textContent = ev.title;
 
-    info.appendChild(date);
     info.appendChild(title);
 
     const creator = document.createElement("span");
@@ -61,15 +68,12 @@ function renderResults(events) {
     li.appendChild(info);
     li.appendChild(creator);
 
-    // Update this href to match the long description page location once it exists
     li.addEventListener("click", () => {
       window.location.href = `../Nikola/templates/long-description.html?id=${ev.eventid}`;
     });
 
     ul.appendChild(li);
   }
-
-  resultsContainer.appendChild(ul);
 }
 
 function updatePagination(count, page) {
@@ -91,3 +95,9 @@ titleInput.addEventListener("keydown", (e) => { if (e.key === "Enter") onSearch(
 userInput.addEventListener("keydown", (e) => { if (e.key === "Enter") onSearch(); });
 prevBtn.addEventListener("click", () => doSearch(currentPage - 1));
 nextBtn.addEventListener("click", () => doSearch(currentPage + 1));
+
+(async () => {
+  const results = await apiFetch("/event?page_num=0");
+  renderResults(results);
+  updatePagination(results.length, 0);
+})();

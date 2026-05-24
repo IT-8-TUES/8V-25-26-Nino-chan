@@ -49,7 +49,13 @@ def get_profile(user_id: str):
     user = user_repo.find_by_id(user_id)
     if not user:
         return None
-    return {"email": user.email, "username": user.username, "bio": user.bio, "pref": user.preference}
+    return {
+        "email": user.email,
+        "username": user.username,
+        "bio": user.bio,
+        "pref": user.preference,
+        "profile_pic_url": f"http://localhost:5001/pic/{user._id}",
+    }
 
 
 def get_archive(user_id: str):

@@ -19,11 +19,41 @@ async function loadProfile() {
   renderView(data);
 }
 
+function makePicturePlaceholder(initial, extraClass) {
+  const el = document.createElement("div");
+  el.className = "profile-picture placeholder" + (extraClass ? " " + extraClass : "");
+  el.textContent = (initial || "?").toUpperCase();
+  return el;
+}
+
+function makePictureImg(src, extraClass) {
+  const img = document.createElement("img");
+  img.className = "profile-picture" + (extraClass ? " " + extraClass : "");
+  img.alt = "Profile picture";
+  img.src = src;
+  return img;
+}
+
+async function fillPictureWrap(wrap, userId, fallbackInitial, extraClass) {
+  wrap.innerHTML = "";
+  const blob = await apiFetchBlob(`${PICS_BASE_URL}/pic/${userId}`);
+  if (blob) {
+    wrap.appendChild(makePictureImg(URL.createObjectURL(blob), extraClass));
+  } else {
+    wrap.appendChild(makePicturePlaceholder(fallbackInitial, extraClass));
+  }
+}
+
 function renderView(data) {
   container.innerHTML = "";
 
   const card = document.createElement("div");
   card.className = "profile-card";
+
+  const pic = document.createElement("div");
+  pic.className = "profile-picture-wrap";
+  card.appendChild(pic);
+  fillPictureWrap(pic, profileUserId, (data.username || "?")[0]);
 
   const heading = document.createElement("h2");
   heading.className = "profile-username";
@@ -42,11 +72,24 @@ function renderView(data) {
   card.appendChild(bio);
 
   if (isOwnProfile) {
+    const pref = document.createElement("p");
+    pref.className = "profile-field";
+    pref.innerHTML = `<span class="field-label">Preference</span><span class="field-value">${data.pref || "—"}</span>`;
+    card.appendChild(pref);
+
     const editBtn = document.createElement("button");
     editBtn.className = "btn-edit";
     editBtn.textContent = "Edit Profile";
     editBtn.addEventListener("click", () => renderEdit(data));
     card.appendChild(editBtn);
+
+    const verifyBtn = document.createElement("button");
+    verifyBtn.className = "btn-edit";
+    verifyBtn.textContent = "Request Verification";
+    verifyBtn.addEventListener("click", () => {
+      window.location.href = "../Nikola/templates/verify.html";
+    });
+    card.appendChild(verifyBtn);
   }
 
   container.appendChild(card);
@@ -143,6 +186,22 @@ function renderEdit(data) {
   const heading = document.createElement("h2");
   heading.textContent = "Edit Profile";
 
+  const picLabel = document.createElement("label");
+  picLabel.textContent = "Profile picture";
+  const picWrap = document.createElement("div");
+  picWrap.className = "profile-picture-wrap";
+  fillPictureWrap(picWrap, profileUserId, (data.username || "?")[0], "pic-upload-preview");
+  const picInput = document.createElement("input");
+  picInput.type = "file";
+  picInput.accept = "image/jpeg,image/png,image/gif";
+  picInput.className = "profile-input";
+  picInput.addEventListener("change", () => {
+    const file = picInput.files && picInput.files[0];
+    if (!file) return;
+    picWrap.innerHTML = "";
+    picWrap.appendChild(makePictureImg(URL.createObjectURL(file), "pic-upload-preview"));
+  });
+
   const usernameLabel = document.createElement("label");
   usernameLabel.textContent = "Username";
   const usernameInput = document.createElement("input");
@@ -164,6 +223,14 @@ function renderEdit(data) {
   bioInput.className = "profile-input";
   bioInput.rows = 4;
 
+  const prefLabel = document.createElement("label");
+  prefLabel.textContent = "Preference";
+  const prefInput = document.createElement("textarea");
+  prefInput.value = data.pref || "";
+  prefInput.placeholder = "Describe the kinds of events you're interested in...";
+  prefInput.className = "profile-input";
+  prefInput.rows = 3;
+
   const errorMsg = document.createElement("p");
   errorMsg.className = "error hidden";
 
@@ -183,17 +250,31 @@ function renderEdit(data) {
       username: usernameInput.value.trim(),
       email: emailInput.value.trim(),
       bio: bioInput.value.trim(),
+      pref: prefInput.value.trim(),
     };
     const res = await apiFetch("/user", {
       method: "PATCH",
       body: JSON.stringify(updated),
     });
-    if (res.code === 200) {
-      renderView(updated);
-    } else {
+    if (!res || res.code !== 200) {
       errorMsg.textContent = "Failed to save. Please try again.";
       errorMsg.classList.remove("hidden");
+      return;
     }
+
+    const file = picInput.files && picInput.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      const picRes = await apiUpload("/pic", formData, PICS_BASE_URL);
+      if (!picRes || picRes.code !== 200) {
+        errorMsg.textContent = "Profile saved, but picture upload failed.";
+        errorMsg.classList.remove("hidden");
+        return;
+      }
+    }
+
+    renderView(updated);
   });
 
   cancelBtn.addEventListener("click", () => loadProfile());
@@ -202,12 +283,17 @@ function renderEdit(data) {
   actions.appendChild(cancelBtn);
 
   card.appendChild(heading);
+  card.appendChild(picLabel);
+  card.appendChild(picWrap);
+  card.appendChild(picInput);
   card.appendChild(usernameLabel);
   card.appendChild(usernameInput);
   card.appendChild(emailLabel);
   card.appendChild(emailInput);
   card.appendChild(bioLabel);
   card.appendChild(bioInput);
+  card.appendChild(prefLabel);
+  card.appendChild(prefInput);
   card.appendChild(errorMsg);
   card.appendChild(actions);
 

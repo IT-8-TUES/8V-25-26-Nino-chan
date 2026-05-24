@@ -13,6 +13,7 @@ tags:
   - name: PROFILE
   - name: VERIFY
   - name: RECOMMENDATIONS
+  - name: PROFILE PICTURES
 
 paths:
 
@@ -266,6 +267,72 @@ paths:
                   creator: teacher1
                   id: 664a1b2c3d4e5f6a7b8c9d0e
 
+  /pic:
+    post:
+      tags: [PROFILE PICTURES]
+      summary: PROFILE PICTURES - upload
+      description: |
+        Lives on the separate pictures service at port 5001, NOT on the main API.
+        Upload a JPEG, PNG, or GIF (including animated) to be used as the
+        authenticated user's profile picture. Target is always the user id
+        carried by the JWT - users cannot upload on behalf of someone else.
+        Max 5 MB. Replaces any previously uploaded picture.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Missing file or unreadable image
+        '413':
+          description: File exceeds 5 MB
+        '415':
+          description: Unsupported format (only JPEG, PNG, GIF allowed)
+
+  /pic/{userid}:
+    get:
+      tags: [PROFILE PICTURES]
+      summary: PROFILE PICTURES - serve
+      description: |
+        Lives on the separate pictures service at port 5001, NOT on the main API.
+        Returns the raw bytes of the user's profile picture with the original
+        mime type (image/jpeg, image/png, or image/gif). GIFs are served untouched
+        so animation is preserved. Returns 404 if the user has not uploaded one.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image bytes
+          content:
+            image/jpeg: {}
+            image/png: {}
+            image/gif: {}
+        '404':
+          description: No picture uploaded for this user
+
   /event:
     get:
       tags: [SEARCH PAGE]
@@ -412,6 +479,9 @@ components:
           type: string
         bio:
           type: string
+        profile_pic_url:
+          type: string
+          description: URL on the profile-pictures service where this user's picture can be fetched. Returns 404 if the user has not uploaded one.
 
     ProfilePatch:
       type: object

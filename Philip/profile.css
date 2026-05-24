@@ -108,6 +108,41 @@ header nav a.active::after {
     letter-spacing: -0.5px;
 }
 
+/* ── Profile picture ── */
+
+.profile-picture-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgb(40, 130, 220);
+    background: #1a1d23;
+    display: block;
+}
+
+.profile-picture.placeholder {
+    background: linear-gradient(135deg, rgb(40, 130, 220), rgb(70, 160, 250));
+    border-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 52px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.pic-upload-preview {
+    margin: 8px 0 12px;
+    align-self: center;
+}
+
 /* ── View mode ── */
 
 .profile-username {

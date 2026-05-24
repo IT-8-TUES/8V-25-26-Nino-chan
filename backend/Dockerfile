@@ -18,6 +18,6 @@ COPY seed.js .
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r//' /entrypoint.sh && chmod +x /entrypoint.sh
 
-EXPOSE 5000
+EXPOSE 5000 5001
 
 ENTRYPOINT ["/entrypoint.sh"]

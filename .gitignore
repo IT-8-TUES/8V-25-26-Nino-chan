@@ -38,3 +38,6 @@ CLAUDE.md
 
 # Docker volumes (local data, not committed)
 data/
+
+# Uploaded user content (profile pictures, etc.)
+backend/uploads/

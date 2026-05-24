@@ -30,3 +30,19 @@ services:
     depends_on:
       ollama:
         condition: service_healthy
+
+  pics:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      MONGO_DB: ${MONGO_DB:-tues_calendar}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
+    volumes:
+      - ./backend/uploads/profile-pics:/app/uploads/profile-pics
+    entrypoint: ["python", "pics_app/app.py"]
+    depends_on:
+      - backend

@@ -38,7 +38,7 @@ def search(title: str = "", user: str = "", page_num: int = 0) -> list:
     return [Event.from_doc(d) for d in db.events.find(query).sort("date", 1).skip(page_num * _PAGE_SIZE).limit(_PAGE_SIZE)]
 
 def vectorSearch(query_vector, today):
-    top_k = 1
+    top_k = 5
     print("maybe it is an error here")
     return db.events.aggregate([
         {

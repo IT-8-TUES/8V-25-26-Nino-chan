@@ -50,7 +50,9 @@ Your personal list of bookmarked events. Only shows events that are still upcomi
 
 ### Profile
 
-Displays a user's public information: their username, email address, and bio. You can view any user's profile, but you can only edit your own.
+Displays a user's public information: their username, email address, bio, and profile picture. You can view any user's profile, but you can only edit your own. Profile pictures support JPEG, PNG, and **animated GIF** (the animation is preserved — not just the first frame). When a user has not uploaded a picture, the profile shows a gradient placeholder with the first letter of their username.
+
+Uploading and serving pictures is handled by a **separate Flask service** (see below) so that potentially large multipart uploads never block the main JSON API. The main API simply returns a URL pointing at the pics service, which the frontend fetches with the user's JWT and renders inline.
 
 ### Recommendations
 
@@ -66,9 +68,10 @@ Under the hood every event is embedded into a 1024-dimensional vector at creatio
 
 ### Backend
 - **Python 3** with **Flask** and **Flask-CORS** for the HTTP API.
-- **Granian** as the production ASGI/WSGI server (replacing the earlier Waitress setup).
+- **Two-process architecture:** the main JSON API on port `5000` and a dedicated **profile-pictures service** on port `5001` (`backend/pics_app/app.py`). Both run on **Granian** as the production ASGI/WSGI server. Splitting the picture service out keeps multipart uploads of potentially large images off the main API.
+- **Pillow** for validating uploaded images (JPEG, PNG, GIF) without re-encoding them, so animated GIFs are stored and served byte-for-byte.
 - **Flasgger** + **PyYAML** to serve the OpenAPI 3.0.3 spec (`endpoints/endpoints.yaml`) as an interactive Swagger UI at `/apidocs/`.
-- **PyJWT** for stateless JWT-based authentication and **bcrypt** for password hashing.
+- **PyJWT** for stateless JWT-based authentication (shared between both services) and **bcrypt** for password hashing.
 - **python-dotenv** for environment configuration.
 
 ### Database
@@ -98,6 +101,10 @@ root/
 ├── dependencies list
 ├── dependency installation script
 ├── backend/
+│   ├── users/
+│   ├── events/
+│   ├── pics_app/           # separate Flask app for profile pictures (port 5001)
+│   └── uploads/            # gitignored — uploaded profile pictures live here
 ├── NIKOLA/
 ├── MARTI/
 ├── PHILIP/
