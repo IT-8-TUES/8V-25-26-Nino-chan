@@ -38,7 +38,7 @@ Submit a request to become a verified publisher. The admins receive an email not
 
 ### Search
 
-Search for events by title or publisher name. The search is flexible — since most events include their topic in the title, you can effectively search by subject as well. Results are displayed as a paginated list with navigation arrows to move between pages. Click any result to view the full event details.
+Full-text search over event **descriptions**, powered by MongoDB Atlas Search. Type what you're looking for and results are ranked by how well each event's description matches your query, rather than by simple substring matching. You can optionally filter by publisher name. Only upcoming events are returned, displayed as a paginated list (10 per page) with navigation arrows to move between pages. Click any result to view the full event details.
 
 ### Long Description
 
@@ -77,6 +77,7 @@ Under the hood every event is embedded into a 1024-dimensional vector at creatio
 ### Database
 - **MongoDB** as the primary store, accessed via **pymongo**.
 - **MongoDB Atlas Vector Search** with a cosine-similarity index (`cosine_index`) on the `events.embedding` field, powering the Recommendations page.
+- **MongoDB Atlas Search** with a full-text index (`event_search`) on `events.description` (and `events.creator_username`), powering the relevance-ranked Search page.
 
 ### AI / Embeddings
 - **Ollama** running the **`mxbai-embed-large`** model locally to generate 1024-dimensional embeddings for both events and user queries.

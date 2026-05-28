@@ -30,12 +30,26 @@ def find_upcoming_by_ids(ids: list, from_date: str) -> list:
 
 def search(title: str = "", user: str = "", page_num: int = 0) -> list:
     today = date_type.today().isoformat()
-    query = {"date": {"$gte":today}}
+
+    # No query at all: browse all upcoming events, date-ascending.
+    if not title and not user:
+        cursor = db.events.find({"date": {"$gte": today}}).sort("date", 1).skip(page_num * _PAGE_SIZE).limit(_PAGE_SIZE)
+        return [Event.from_doc(d) for d in cursor]
+
+    # Full-text Atlas Search on description, ordered by relevance.
+    compound = {}
     if title:
-        query["title"] = {"$regex": title, "$options": "i"}
+        compound["must"] = [{"text": {"query": title, "path": "description"}}]
     if user:
-        query["creator_username"] = {"$regex": user, "$options": "i"}
-    return [Event.from_doc(d) for d in db.events.find(query).sort("date", 1).skip(page_num * _PAGE_SIZE).limit(_PAGE_SIZE)]
+        compound["filter"] = [{"text": {"query": user, "path": "creator_username"}}]
+
+    cursor = db.events.aggregate([
+        {"$search": {"index": "event_search", "compound": compound}},
+        {"$match": {"date": {"$gte": today}}},
+        {"$skip": page_num * _PAGE_SIZE},
+        {"$limit": _PAGE_SIZE},
+    ])
+    return [Event.from_doc(d) for d in cursor]
 
 def vectorSearch(query_vector, today):
     top_k = 5

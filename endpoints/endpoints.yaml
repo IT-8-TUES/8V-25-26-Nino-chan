@@ -337,7 +337,12 @@ paths:
     get:
       tags: [SEARCH PAGE]
       summary: SEARCH PAGE
-      description: normal. Regex search on title and/or publisher username. Paginated with page_num (0-indexed).
+      description: >-
+        Full-text Atlas Search (`$search`) over event descriptions, ranked by relevance.
+        The `title` param is the free-text query matched against the event description;
+        `user` filters by publisher username. Only upcoming events are returned.
+        Paginated with page_num (0-indexed, 10 per page). With no params, browses all
+        upcoming events ordered by date ascending.
       parameters:
         - in: header
           name: jwt
