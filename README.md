@@ -50,7 +50,7 @@ Your personal list of bookmarked events. Only shows events that are still upcomi
 
 ### Profile
 
-Displays a user's public information: their username, email address, bio, and profile picture. You can view any user's profile, but you can only edit your own. Profile pictures support JPEG, PNG, and **animated GIF** (the animation is preserved — not just the first frame). When a user has not uploaded a picture, the profile shows a gradient placeholder with the first letter of their username.
+Displays a user's public information: their username, email address, bio, and profile picture. You can view any user's profile, but you can only edit your own. Profile pictures support JPEG, PNG, and GIF. When a user has not uploaded a picture, the profile shows a gradient placeholder with the first letter of their username.
 
 Uploading and serving pictures is handled by a **separate Flask service** (see below) so that potentially large multipart uploads never block the main JSON API. The main API simply returns a URL pointing at the pics service, which the frontend fetches with the user's JWT and renders inline.
 

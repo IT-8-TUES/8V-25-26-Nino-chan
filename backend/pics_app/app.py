@@ -13,7 +13,7 @@ from auth import require_auth
 UPLOAD_DIR = Path(__file__).resolve().parent.parent / "uploads" / "profile-pics"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
-MAX_BYTES = 5 * 1024 * 1024
+MAX_BYTES = 10 * 1024 * 1024
 FORMAT_EXT = {"JPEG": "jpg", "PNG": "png", "GIF": "gif"}
 FORMAT_MIME = {"jpg": "image/jpeg", "png": "image/png", "gif": "image/gif"}
 

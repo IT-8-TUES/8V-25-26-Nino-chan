@@ -42,7 +42,7 @@ app.register_blueprint(users_bp)
 
 if __name__ == "__main__":
     from granian import Granian
-    threads = 1
+    threads = 5 #if the app is slow just increase this value 
     Granian("app:app", address="0.0.0.0", port=5000, interface="wsgi", blocking_threads=threads).serve()
     #from waitress import serve
     #serve(app, host="localhost", port=5000)
