@@ -10,7 +10,7 @@ TUES Event Calendar is a web app for publishing and discovering school events at
 | WSGI server | Granian (5 blocking threads) |
 | API docs | Flasgger / Swagger UI driven by an OpenAPI 3.0.3 spec |
 | CORS | Flask-CORS |
-| Database | MongoDB (Atlas — uses `$vectorSearch`) via PyMongo |
+| Database | MongoDB (Atlas — uses `$vectorSearch` and full-text `$search`) via PyMongo |
 | Auth | Stateless JWT (PyJWT, HS256) |
 | Password hashing | bcrypt |
 | Embeddings | Ollama running `mxbai-embed-large` (1024-dim) |
@@ -142,7 +142,7 @@ erDiagram
     USERS }o--o{ EVENTS : "bookmarks"
 ```
 
-The Atlas `$vectorSearch` index `cosine_index` is created on startup by `initDB.py`: vector field `embedding` (1024 dims, cosine similarity) plus `date` and `user_id` as filter fields.
+The Atlas `$vectorSearch` index `cosine_index` is created on startup by `initDB.py`: vector field `embedding` (1024 dims, cosine similarity) plus `date` and `user_id` as filter fields. `initDB.py` also creates the full-text Atlas Search index `event_search` (type `search`) mapping `description` and `creator_username` as strings — this powers the Search page. The `date >= today` constraint for search is applied with a `$match` stage after `$search`, so `date` is not part of that index.
 
 ## API endpoints
 
@@ -157,7 +157,7 @@ The Atlas `$vectorSearch` index `cosine_index` is created on startup by `initDB.
 | GET | `/user/<userid>` | ✓ | — | `?mode=profile` or `?mode=archive` |
 | POST | `/user/<userid>` | ✓ | — | Add / remove a bookmark |
 | GET | `/event/<id>` | ✓ | — | Date (`YYYY-MM-DD`) → list; ObjectId → detail |
-| GET | `/event` | ✓ | — | Search by title / user, paginated (10/page) |
+| GET | `/event` | ✓ | — | Full-text `$search` on description, `creator_username` filter, relevance-ranked, paginated (10/page) |
 | POST | `/event` | ✓ | ✓ | Create an event |
 | GET | `/vibeSearch` | ✓ | — | Top-5 semantically similar upcoming events |
 | POST | `/pic` | ✓ | — | Upload own profile picture (≤5 MB) *(port 5001)* |
