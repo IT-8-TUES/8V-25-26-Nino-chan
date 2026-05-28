@@ -14,6 +14,12 @@ def get_event(id):
     return jsonify(data)
 
 
+@events_bp.route("/event/month/<year>/<month>", methods=["GET"])
+@auth.require_auth
+def get_month_dates(year, month):
+    return jsonify(event_service.get_dates_in_month(year, month))
+
+
 @events_bp.route("/event", methods=["GET"])
 @auth.require_auth
 def search_events():

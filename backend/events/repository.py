@@ -24,6 +24,10 @@ def find_by_date(date: str) -> list:
     return [Event.from_doc(d) for d in db.events.find({"date": date})]
 
 
+def find_dates_in_month(year: str, month: str) -> list:
+    return db.events.distinct("date", {"date": {"$regex": f"^{year}-{month}-"}})
+
+
 def find_upcoming_by_ids(ids: list, from_date: str) -> list:
     return [Event.from_doc(d) for d in db.events.find({"_id": {"$in": ids}, "date": {"$gte": from_date}}).sort("date", 1)]
 

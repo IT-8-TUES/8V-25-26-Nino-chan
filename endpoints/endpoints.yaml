@@ -52,6 +52,42 @@ paths:
                       $ref: '#/components/schemas/EventSummary'
                   - $ref: '#/components/schemas/EventDetail'
 
+  /event/month/{year}/{month}:
+    get:
+      tags: [HOME]
+      summary: HOME — dates with events in a month
+      description: |
+        Returns the distinct dates (YYYY-MM-DD) within the given month
+        that have at least one event. Used by the HOME calendar to highlight
+        days that contain events.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: year
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: month
+          required: true
+          description: month number, 1-12 (zero-padding optional)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "2026-05-12"
+
   /user/login:
     post:
       operationId: login

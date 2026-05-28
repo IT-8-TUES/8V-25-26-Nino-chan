@@ -29,6 +29,11 @@ def get_by_date_or_id(id: str):
     }
 
 
+def get_dates_in_month(year: str, month: str) -> list:
+    month = month.zfill(2)
+    return sorted(event_repo.find_dates_in_month(year, month))
+
+
 def search(title: str, user: str, page_num: int) -> list:
     evs = event_repo.search(title, user, page_num)
     return [{
