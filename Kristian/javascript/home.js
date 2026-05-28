@@ -15,6 +15,7 @@ const today = new Date();
 let viewYear = today.getFullYear();
 let viewMonth = today.getMonth();
 let selectedDate = null;
+let datesWithEvents = new Set(); // Store dates that have events
 
 const grid = document.getElementById('calendar-grid');
 const monthLabel = document.getElementById('month-label');
@@ -40,6 +41,32 @@ function resetEventPanel() {
     subtitle.style.display = '';
     subtitle.textContent = 'Click any day above to see the events for that date.';
     eventList.innerHTML = '';
+}
+
+async function fetchMonthEvents() {
+    try {
+        const response = await fetch(`http://localhost:5000/event/month/${viewYear}/${pad(viewMonth + 1)}`, {
+            headers: { 'jwt': jwt }
+        });
+
+        if (response.status === 401) {
+            localStorage.removeItem('jwt');
+            localStorage.removeItem('user_id');
+            window.location.href = '../../Marti/html/login.html';
+            return;
+        }
+
+        const data = await response.json();
+        datesWithEvents.clear();
+
+        if (Array.isArray(data)) {
+            data.forEach(function (dateString) {
+                datesWithEvents.add(dateString);
+            });
+        }
+    } catch (error) {
+        console.error('Failed to fetch month events:', error);
+    }
 }
 
 function renderCalendar() {
@@ -71,6 +98,12 @@ function renderCalendar() {
         const iso = isoDate(viewYear, viewMonth, d);
         cell.dataset.date = iso;
         cell.textContent = d;
+        
+        // Add event indicator if this date has events
+        if (datesWithEvents.has(iso)) {
+            cell.classList.add('has-event');
+        }
+        
         if (iso === todayIso) {
             cell.classList.add('today');
         }
@@ -137,7 +170,7 @@ document.getElementById('prev-month').addEventListener('click', function () {
         viewYear--;
     }
     resetEventPanel();
-    renderCalendar();
+    fetchMonthEvents().then(() => renderCalendar());
 });
 
 document.getElementById('next-month').addEventListener('click', function () {
@@ -147,7 +180,7 @@ document.getElementById('next-month').addEventListener('click', function () {
         viewYear++;
     }
     resetEventPanel();
-    renderCalendar();
+    fetchMonthEvents().then(() => renderCalendar());
 });
 
-renderCalendar();
+fetchMonthEvents().then(() => renderCalendar());

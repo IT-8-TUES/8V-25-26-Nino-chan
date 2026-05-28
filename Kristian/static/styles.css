@@ -241,6 +241,18 @@ header nav a.active::after {
     color: #c0c5cf;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
+    position: relative;
+}
+.day-cell.has-event::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background-color: rgb(40, 130, 220);
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(40, 130, 220, 0.6);
 }
 .day-cell.empty {
     visibility: hidden;
