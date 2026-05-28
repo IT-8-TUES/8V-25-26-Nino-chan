@@ -259,3 +259,167 @@ footer {
 footer p {
     margin: 0;
 }
+
+.my-events-body h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #e6e8ec;
+    letter-spacing: -0.5px;
+}
+.my-events-body > p {
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #8b919e;
+}
+.event-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #c0c5cf;
+    letter-spacing: 0.3px;
+}
+.card-body input[type="text"],
+.card-body input[type="date"],
+.card-body textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    margin-bottom: 14px;
+    background: #1a1d23;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #e6e8ec;
+    line-height: 1.5;
+    transition: all 0.2s ease;
+}
+.card-body textarea {
+    resize: vertical;
+    min-height: 64px;
+}
+.card-body input[type="text"]::placeholder,
+.card-body textarea::placeholder {
+    color: #5a6070;
+}
+.card-body input[type="text"]:focus,
+.card-body input[type="date"]:focus,
+.card-body textarea:focus {
+    outline: none;
+    border-color: rgb(40, 130, 220);
+    box-shadow: 0 0 0 3px rgba(40, 130, 220, 0.2);
+}
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+.btn-primary {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgb(40,130,220) 0%, rgb(70,160,250) 50%, rgb(40,130,220) 100%);
+    background-size: 200% auto;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+    animation: shimmer 1.2s linear infinite;
+    box-shadow: 0 6px 18px rgba(40, 130, 220, 0.45);
+    transform: translateY(-1px);
+}
+.btn-primary:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: none;
+    animation: none;
+}
+.btn-neutral {
+    padding: 13px 20px;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
+    background: transparent;
+    color: #c0c5cf;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn-neutral:hover {
+    background: #2e3340;
+    border-color: #3a4050;
+    color: #e6e8ec;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+.event-card {
+    background: #1a1d23;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
+    padding: 14px 16px;
+    animation: fadeInUp 0.25s ease both;
+}
+.event-card-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6e8ec;
+    word-break: break-word;
+}
+.event-card-date {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #5a6070;
+    margin-bottom: 8px;
+}
+.event-card-description {
+    margin: 0 0 12px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #c0c5cf;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.event-card .actions {
+    display: flex;
+    gap: 8px;
+}
+.btn-edit,
+.btn-delete {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.btn-edit {
+    border: 1px solid rgb(40, 130, 220);
+    color: rgb(40, 130, 220);
+}
+.btn-edit:hover {
+    background: rgb(40, 130, 220);
+    color: white;
+}
+.btn-delete {
+    border: 1px solid #e05c5c;
+    color: #e05c5c;
+}
+.btn-delete:hover {
+    background: #e05c5c;
+    color: white;
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalTUES</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>CalTUES</h1>
+        <nav>
+            <a href="../../Kristian/templates/home.html">Home</a>
+            <a href="../../Philip/search.html">Search</a>
+            <a href="../../Marti/html/archive.html">Archive</a>
+            <a href="../../Philip/profile.html">Profile</a>
+            <a href="./my-events.html" class="active">My Events</a>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="card-body my-events-body">
+            <h2>My Events</h2>
+            <p>Post a new event, then edit or delete your own events below.</p>
+
+            <form id="eventForm" class="event-form">
+                <label for="eventTitle">Title</label>
+                <input type="text" id="eventTitle" name="title" placeholder="Event title" required>
+
+                <label for="eventDate">Date</label>
+                <input type="date" id="eventDate" name="date" required>
+
+                <label for="eventDescription">Description</label>
+                <textarea id="eventDescription" name="description" placeholder="What's the event about?" rows="3" required></textarea>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitBtn" class="btn-primary">Add Event</button>
+                    <button type="button" id="cancelBtn" class="btn-neutral" hidden>Cancel</button>
+                </div>
+            </form>
+
+            <div id="message"></div>
+
+            <div id="eventList" class="event-list"></div>
+            <p id="emptyState" class="empty-state">You haven't posted any events yet.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025/2026 CalTUES</p>
+    </footer>
+
+    <script src="../java script/my-events.js"></script>
+</body>
+</html>
