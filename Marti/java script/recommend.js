@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    vibeInput.value = data.preference || '';
+                    vibeInput.value = data.pref || '';
+                    search();
                 } else {
                     this.checked = false;
                     vibeInput.disabled = false;
