@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 container.appendChild(card);
             });
         } catch {
-            container.innerHTML = '<p class="empty-state">Could not load recommendations. Please try again later.</p>';
+            container.innerHTML = '<p class="empty-state">Could not load recommendations. Please try again later .</p>';
         }
 
         findBtn.disabled = false;
