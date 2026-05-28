@@ -249,3 +249,90 @@ footer {
     color: #5a6070;
     z-index: 10;
 }
+
+/* Recommendations page */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.recommend-form {
+    margin-bottom: 24px;
+    animation: slideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+#vibe-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    background: #1a1d23;
+    border: 1px solid #2e3340;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #e6e8ec;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 70px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+#vibe-input::placeholder {
+    color: #5a6070;
+}
+#vibe-input:focus {
+    outline: none;
+    border-color: rgb(40, 130, 220);
+    box-shadow: 0 0 0 3px rgba(40, 130, 220, 0.2);
+}
+#vibe-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+.recommend-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+.pref-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #8b919e;
+    cursor: pointer;
+    user-select: none;
+}
+.pref-check input[type="checkbox"] {
+    accent-color: rgb(40, 130, 220);
+    cursor: pointer;
+}
+#find-btn {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgb(40,130,220) 0%, rgb(70,160,250) 50%, rgb(40,130,220) 100%);
+    background-size: 200% auto;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+#find-btn:hover {
+    animation: shimmer 1.2s linear infinite;
+    box-shadow: 0 6px 18px rgba(40, 130, 220, 0.45);
+    transform: translateY(-1px);
+}
+#find-btn:active {
+    transform: scale(0.98);
+    box-shadow: none;
+    animation: none;
+}
+#find-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+    animation: none;
+    box-shadow: none;
+}

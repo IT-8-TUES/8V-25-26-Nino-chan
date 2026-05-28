@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalTUES — For You</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>CalTUES</h1>
+        <nav>
+            <a href="../../Kristian/templates/home.html">Home</a>
+            <a href="../../Philip/search.html">Search</a>
+            <a href="./archive.html">Archive</a>
+            <a href="../../Philip/profile.html">Profile</a>
+            <a href="./recommend.html" class="active">For You</a>
+        </nav>
+    </header>
+    <div class="archive-container">
+        <h2>For You</h2>
+        <p class="subtitle">Discover events that match your vibe.</p>
+        <div class="recommend-form">
+            <textarea id="vibe-input" rows="3" placeholder="Describe what kind of event you're looking for..."></textarea>
+            <div class="recommend-controls">
+                <label class="pref-check">
+                    <input type="checkbox" id="use-pref">
+                    <span>Use my saved preferences</span>
+                </label>
+                <button id="find-btn">Find</button>
+            </div>
+        </div>
+        <div id="results-container"></div>
+    </div>
+    <footer>
+        <p>&copy; 2026 CalTUES &middot; TUES</p>
+    </footer>
+    <script src="../java script/recommend.js"></script>
+</body>
+</html>
