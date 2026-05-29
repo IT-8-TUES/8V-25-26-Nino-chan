@@ -54,6 +54,10 @@ Displays a user's public information: their username, email address, bio, and pr
 
 Uploading and serving pictures is handled by a **separate Flask service** (see below) so that potentially large multipart uploads never block the main JSON API. The main API simply returns a URL pointing at the pics service, which the frontend fetches with the user's JWT and renders inline.
 
+### My Events
+
+A management page for your own events. Lists the upcoming events you have created and lets you post a new one, or edit and delete existing ones inline. Only upcoming events are shown — events whose dates have passed drop off the list. Posting, editing, and deleting all require a verified account, and you can only edit or delete events you created. Reachable from a "My Events" button on your own Profile page.
+
 ### Recommendations
 
 A personalised discovery page powered by semantic ("vibe") search. Instead of matching keywords, you describe the kind of event you're looking for in plain language — for example *"a hands-on workshop about robotics"* — and the platform returns the five upcoming events whose descriptions are most semantically similar to your prompt.
