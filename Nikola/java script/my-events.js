@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const STORAGE_KEY = 'my_events';
-
     const form = document.getElementById('eventForm');
     const titleInput = document.getElementById('eventTitle');
     const dateInput = document.getElementById('eventDate');
@@ -11,30 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const emptyState = document.getElementById('emptyState');
     const message = document.getElementById('message');
 
-    let events = loadEvents();
+    let events = [];
     let editingId = null;
     let messageTimer = null;
 
-    function loadEvents() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return [];
-        try {
-            const parsed = JSON.parse(raw);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function saveEvents() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-    }
-
-    function newId() {
-        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
-            return window.crypto.randomUUID();
-        }
-        return Date.now().toString() + Math.random().toString(16).slice(2);
+    async function fetchEvents() {
+        const res = await apiFetch('/event/mine');
+        events = Array.isArray(res) ? res : [];
+        render();
     }
 
     function showMessage(text, kind) {
@@ -80,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             editBtn.className = 'btn-edit';
             editBtn.textContent = 'Edit';
             editBtn.addEventListener('click', function () {
-                startEdit(event.id);
+                startEdit(event.eventid);
             });
 
             const deleteBtn = document.createElement('button');
@@ -88,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteBtn.className = 'btn-delete';
             deleteBtn.textContent = 'Delete';
             deleteBtn.addEventListener('click', function () {
-                deleteEvent(event.id);
+                deleteEvent(event.eventid);
             });
 
             actions.appendChild(editBtn);
@@ -104,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function startEdit(id) {
-        const target = events.find(function (e) { return e.id === id; });
+        const target = events.find(function (e) { return e.eventid === id; });
         if (!target) return;
 
         editingId = id;
@@ -124,21 +106,29 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelBtn.hidden = true;
     }
 
-    function deleteEvent(id) {
-        const target = events.find(function (e) { return e.id === id; });
+    async function deleteEvent(id) {
+        const target = events.find(function (e) { return e.eventid === id; });
         if (!target) return;
         if (!window.confirm('Delete "' + target.title + '"?')) return;
 
-        events = events.filter(function (e) { return e.id !== id; });
-        saveEvents();
+        const res = await apiFetch('/event/' + id, { method: 'DELETE' });
+        if (!res) return;
 
-        if (editingId === id) cancelEdit();
-
-        render();
-        showMessage('Event deleted.', 'success');
+        if (res.code === 200) {
+            if (editingId === id) cancelEdit();
+            await fetchEvents();
+            showMessage('Event deleted.', 'success');
+        } else if (res.code === 403) {
+            showMessage('You can only delete your own events.', 'error');
+        } else if (res.code === 404) {
+            showMessage('Event no longer exists.', 'error');
+            await fetchEvents();
+        } else {
+            showMessage("Couldn't delete event.", 'error');
+        }
     }
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const title = titleInput.value.trim();
@@ -150,25 +140,35 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (editingId) {
-            events = events.map(function (ev) {
-                if (ev.id !== editingId) return ev;
-                return { id: ev.id, title: title, date: date, description: description };
-            });
-            saveEvents();
+        const body = JSON.stringify({ title: title, description: description, date: date });
+        const res = editingId
+            ? await apiFetch('/event/' + editingId, { method: 'PUT', body: body })
+            : await apiFetch('/event', { method: 'POST', body: body });
+
+        if (!res) return;
+
+        if (res.code === 200) {
+            if (editingId) {
+                cancelEdit();
+                await fetchEvents();
+                showMessage('Event updated.', 'success');
+            } else {
+                form.reset();
+                await fetchEvents();
+                showMessage('Event added.', 'success');
+            }
+        } else if (res.code === 403) {
+            showMessage('Your account is not verified. Contact an admin to get publishing rights.', 'error');
+        } else if (res.code === 404) {
+            showMessage('Event no longer exists.', 'error');
             cancelEdit();
-            render();
-            showMessage('Event updated.', 'success');
+            await fetchEvents();
         } else {
-            events.push({ id: newId(), title: title, date: date, description: description });
-            saveEvents();
-            form.reset();
-            render();
-            showMessage('Event added.', 'success');
+            showMessage('Something went wrong. Please try again.', 'error');
         }
     });
 
     cancelBtn.addEventListener('click', cancelEdit);
 
-    render();
+    fetchEvents();
 });
