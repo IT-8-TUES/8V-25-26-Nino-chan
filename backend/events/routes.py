@@ -5,6 +5,12 @@ from events import service as event_service
 events_bp = Blueprint("events", __name__)
 
 
+@events_bp.route("/event/mine", methods=["GET"])
+@auth.require_auth
+def get_my_events():
+    return jsonify(event_service.get_my_events(g.user))
+
+
 @events_bp.route("/event/<id>", methods=["GET"])
 @auth.require_auth
 def get_event(id):
@@ -12,6 +18,31 @@ def get_event(id):
     if mode == "not_found":
         return jsonify({"code": 404}), 404
     return jsonify(data)
+
+
+@events_bp.route("/event/<id>", methods=["PUT"])
+@auth.require_auth
+@auth.require_verified
+def update_event(id):
+    data = request.get_json()
+    result = event_service.update_event(g.user, id, data["title"], data["description"], data["date"])
+    if result == "not_found":
+        return jsonify({"code": 404}), 404
+    if result == "forbidden":
+        return jsonify({"code": 403}), 403
+    return jsonify({"code": 200})
+
+
+@events_bp.route("/event/<id>", methods=["DELETE"])
+@auth.require_auth
+@auth.require_verified
+def delete_event(id):
+    result = event_service.delete_event(g.user, id)
+    if result == "not_found":
+        return jsonify({"code": 404}), 404
+    if result == "forbidden":
+        return jsonify({"code": 403}), 403
+    return jsonify({"code": 200})
 
 
 @events_bp.route("/event/month/<year>/<month>", methods=["GET"])

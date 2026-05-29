@@ -17,6 +17,30 @@ tags:
 
 paths:
 
+  /event/mine:
+    get:
+      tags: [MY EVENTS]
+      summary: MY EVENTS — list own upcoming events
+      description: |
+        Returns the upcoming events (date >= today) created by the authenticated
+        user, ordered by date ascending. Used by the My Events management page.
+        This static route is matched ahead of the dynamic /event/{id} rule.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MyEvent'
+
   /event/{id}:
     get:
       tags: [HOME, LONG DESCRIPTION]
@@ -51,6 +75,75 @@ paths:
                     items:
                       $ref: '#/components/schemas/EventSummary'
                   - $ref: '#/components/schemas/EventDetail'
+
+    put:
+      tags: [MY EVENTS]
+      summary: MY EVENTS — update own event
+      description: |
+        Updates an event the authenticated user created. Requires a verified
+        account; the description is re-embedded so vibe search stays accurate.
+        Returns 403 if the account is unverified or the event belongs to
+        another user, 404 if the event does not exist.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          description: event ObjectId string
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEvent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+        '403':
+          description: Account not verified, or event belongs to another user
+        '404':
+          description: Event not found
+
+    delete:
+      tags: [MY EVENTS]
+      summary: MY EVENTS — delete own event
+      description: |
+        Deletes an event the authenticated user created. Requires a verified
+        account. Returns 403 if the account is unverified or the event belongs
+        to another user, 404 if the event does not exist.
+      parameters:
+        - in: header
+          name: jwt
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          description: event ObjectId string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code'
+        '403':
+          description: Account not verified, or event belongs to another user
+        '404':
+          description: Event not found
 
   /event/month/{year}/{month}:
     get:
@@ -495,6 +588,18 @@ components:
         creator:
           type: string
         creatorid:
+          type: string
+
+    MyEvent:
+      type: object
+      properties:
+        eventid:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+        description:
           type: string
 
     SearchResult:

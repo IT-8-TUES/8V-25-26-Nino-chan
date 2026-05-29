@@ -127,7 +127,7 @@ async function seed() {
   const users = [
     {
       _id:           userId.ivan,
-      email:         "ivan.petrov@tues.bg",
+      email:         "ivan.petrov@elsys-bg.org",
       username:      "ivanpetrov",
       password_hash: hash,
       bio:           "Teacher at TUES. Organises programming workshops and loves Python.",
@@ -137,7 +137,7 @@ async function seed() {
     },
     {
       _id:           userId.maria,
-      email:         "maria.georgieva@tues.bg",
+      email:         "maria.georgieva@elsys-bg.org",
       username:      "mariag",
       password_hash: hash,
       bio:           "Robotics and embedded systems enthusiast. Club president.",
@@ -147,7 +147,7 @@ async function seed() {
     },
     {
       _id:           userId.stefan,
-      email:         "stefan.dimitrov@tues.bg",
+      email:         "stefan.dimitrov@elsys-bg.org",
       username:      "stefand",
       password_hash: hash,
       bio:           "10th grade student interested in web development.",
@@ -157,7 +157,7 @@ async function seed() {
     },
     {
       _id:           userId.elena,
-      email:         "elena.todorova@tues.bg",
+      email:         "elena.todorova@elsys-bg.org",
       username:      "elenat",
       password_hash: hash,
       bio:           "11th grade. Into AI and competitive programming.",
@@ -167,7 +167,7 @@ async function seed() {
     },
         {
       _id:           userId.trajkov,
-      email:         "trajkov@tues.bg",
+      email:         "trajkov@elsys-bg.org",
       username:      "trajkov",
       password_hash: hash,
       bio:           "12th grade. Interested in cybersecurity.",

@@ -90,6 +90,14 @@ function renderView(data) {
       window.location.href = "../Nikola/templates/verify.html";
     });
     card.appendChild(verifyBtn);
+
+    const myEventsBtn = document.createElement("button");
+    myEventsBtn.className = "btn-edit";
+    myEventsBtn.textContent = "My Events";
+    myEventsBtn.addEventListener("click", () => {
+      window.location.href = "../Nikola/templates/my-events.html";
+    });
+    card.appendChild(myEventsBtn);
   }
 
   container.appendChild(card);

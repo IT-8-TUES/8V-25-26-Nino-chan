@@ -57,7 +57,7 @@ graph TB
 
 ## Layered backend
 
-Each entity (`users`, `events`) is a Python package with four layers. Dependencies flow one way: routes → service → repository → model. Cross-entity dependency goes only one way too — `users/service.py` reads `events/repository.py` (to resolve bookmarked events for the archive); nothing in `events/` imports from `users/`.
+Each entity (`users`, `events`) is a Python package with four layers. Dependencies flow one way: routes → service → repository → model. 
 
 ```mermaid
 graph LR
@@ -126,7 +126,7 @@ erDiagram
         string bio
         bool verified
         string pref "default vibe query"
-        array embedding "768-dim"
+        array embedding "1024-dim"
         array bookmarks "ObjectId[] of events"
     }
     EVENTS {
@@ -156,18 +156,24 @@ The Atlas `$vectorSearch` index `cosine_index` is created on startup by `initDB.
 | PATCH | `/user` | ✓ | — | Update email / username / bio / preference |
 | GET | `/user/<userid>` | ✓ | — | `?mode=profile` or `?mode=archive` |
 | POST | `/user/<userid>` | ✓ | — | Add / remove a bookmark |
+| GET | `/event/mine` | ✓ | — | Own upcoming events, date-ascending (MY EVENTS page) |
 | GET | `/event/<id>` | ✓ | — | Date (`YYYY-MM-DD`) → list; ObjectId → detail |
+| GET | `/event/month/<year>/<month>` | ✓ | — | Dates in a month that have ≥1 event (HOME calendar) |
 | GET | `/event` | ✓ | — | Full-text `$search` on description, `creator_username` filter, relevance-ranked, paginated (10/page) |
 | POST | `/event` | ✓ | ✓ | Create an event |
+| PUT | `/event/<id>` | ✓ | ✓ | Update own event (re-embeds); 403 if not owner |
+| DELETE | `/event/<id>` | ✓ | ✓ | Delete own event; 403 if not owner |
 | GET | `/vibeSearch` | ✓ | — | Top-5 semantically similar upcoming events |
 | POST | `/pic` | ✓ | — | Upload own profile picture (≤5 MB) *(port 5001)* |
 | GET | `/pic/<userid>` | ✓ | — | Serve a profile picture *(port 5001)* |
 
-Two endpoints are deliberately dual-purpose: `GET /event/<id>` branches on whether `id` looks like a date or an ObjectId, and `GET /user/<userid>` branches on the `mode` query param.
+Two endpoints are deliberately dual-purpose: `GET /event/<id>` branches on whether `id` looks like a date or an ObjectId, and `GET /user/<userid>` branches on the `mode` query param. `GET /event/mine` is a static rule, which Werkzeug ranks above the dynamic `GET /event/<id>`, so it does not collide. `PUT`/`DELETE /event/<id>` reuse that dynamic path and enforce ownership (`creator_id` must match the caller) on top of `@require_verified`.
+
+The MY EVENTS page (`Nikola/templates/my-events.html`) uses these to list, create, edit, and delete the caller's own upcoming events; it is reached from a button on the owner's Profile page.
 
 ## Profile-pictures service
 
-A separate Flask app on port 5001, sharing `auth.py` and `config.py` with the main API so JWTs are trusted across both. Storage is filesystem-only at `uploads/profile-pics/<user_id>.<ext>` — there is no DB field; the serve route globs `<user_id>.*` to discover the extension. Pillow only validates that bytes are JPEG/PNG/GIF and enforces the 5 MB cap; the original bytes are written unchanged, so animated GIFs are preserved frame-for-frame. Upload identity comes from the JWT (no `<userid>` in the `POST /pic` path), so users cannot upload on someone else's behalf. Because `<img src>` cannot send headers, the frontend fetches pictures as a blob with the `jwt` header and renders them via `URL.createObjectURL`.
+A separate Flask app on port 5001, sharing `auth.py` and `config.py` with the main API so JWTs are trusted across both. Storage is filesystem-only at `uploads/profile-pics/<user_id>.<ext>` — there is no DB field; the serve route globs `<user_id>.*` to discover the extension. Pillow only validates that bytes are JPEG/PNG/GIF and enforces the 10 MB cap; the original bytes are written unchanged, so animated GIFs are preserved frame-for-frame. Upload identity comes from the JWT (no `<userid>` in the `POST /pic` path), so users cannot upload on someone else's behalf. Because `<img src>` cannot send headers, the frontend fetches pictures as a blob with the `jwt` header and renders them via `URL.createObjectURL`.
 
 ## Frontend
 
@@ -196,7 +202,7 @@ graph TB
         BE["backend<br/>:5000<br/>entrypoint: seed + app.py"]
         PI["pics<br/>:5001<br/>entrypoint: pics_app/app.py"]
     end
-    HOSTV[("host volume<br/>./data/profile-pics")]
+    HOSTV[("host volume<br/>./backend/uploads/profile-pics")]
     MONGO[("MongoDB Atlas")]
 
     BE -->|depends_on healthy| OL
@@ -206,4 +212,4 @@ graph TB
     PI --- HOSTV
 ```
 
-Required environment (`.env`, see `.env.example`): `MONGO_URI`, `MONGO_DB`, `JWT_SECRET`; `OLLAMA_HOST` for embeddings; and the `MAIL_*` / `ADMIN_EMAIL` vars for the verification email. Verification itself is manual — `/user/verify` emails the admins, who then set `verified: true` directly in MongoDB; there is no admin endpoint.
+Required environment (`.env`): `MONGO_URI`, `MONGO_DB`, `JWT_SECRET`; `OLLAMA_HOST` for embeddings; and the `MAIL_*` / `ADMIN_EMAIL` vars for the verification email. Verification itself is manual — `/user/verify` emails the admins, who then set `verified: true` directly in MongoDB; there is no admin endpoint.

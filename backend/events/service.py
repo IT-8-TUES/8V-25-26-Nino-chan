@@ -73,3 +73,34 @@ def create(user: User, title: str, description: str, event_date: str):
         embedding=embed(description, task="document")
 
     ))
+
+
+def get_my_events(user: User) -> list:
+    today = date_type.today().isoformat()
+    evs = event_repo.find_upcoming_by_creator(user._id, today)
+    return [{
+        "eventid": str(e._id),
+        "title": e.title,
+        "date": e.date,
+        "description": e.description,
+    } for e in evs]
+
+
+def update_event(user: User, event_id: str, title: str, description: str, event_date: str) -> str:
+    ev = event_repo.find_by_id(event_id)
+    if ev is None:
+        return "not_found"
+    if str(ev.creator_id) != str(user._id):
+        return "forbidden"
+    event_repo.update(event_id, title, description, event_date, embed(description, task="document"))
+    return "ok"
+
+
+def delete_event(user: User, event_id: str) -> str:
+    ev = event_repo.find_by_id(event_id)
+    if ev is None:
+        return "not_found"
+    if str(ev.creator_id) != str(user._id):
+        return "forbidden"
+    event_repo.delete(event_id)
+    return "ok"

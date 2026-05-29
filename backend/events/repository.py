@@ -32,6 +32,21 @@ def find_upcoming_by_ids(ids: list, from_date: str) -> list:
     return [Event.from_doc(d) for d in db.events.find({"_id": {"$in": ids}, "date": {"$gte": from_date}}).sort("date", 1)]
 
 
+def find_upcoming_by_creator(creator_id, from_date: str) -> list:
+    return [Event.from_doc(d) for d in db.events.find({"creator_id": creator_id, "date": {"$gte": from_date}}).sort("date", 1)]
+
+
+def update(event_id: str, title: str, description: str, date: str, embedding) -> None:
+    db.events.update_one(
+        {"_id": ObjectId(event_id)},
+        {"$set": {"title": title, "description": description, "date": date, "embedding": embedding}},
+    )
+
+
+def delete(event_id: str) -> None:
+    db.events.delete_one({"_id": ObjectId(event_id)})
+
+
 def search(title: str = "", user: str = "", page_num: int = 0) -> list:
     today = date_type.today().isoformat()
 

@@ -1,5 +1,5 @@
 class Event:
-    def __init__(self, title, description, date, creator_id, creator_username, embedding=[0 for i in range(768)],_id=None):
+    def __init__(self, title, description, date, creator_id, creator_username, embedding=[0 for i in range(1024)],_id=None):
         self._id = _id
         self.title = title
         self.description = description
